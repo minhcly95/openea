@@ -152,7 +152,7 @@ void Strategy::Evolve(SessionPtr& pSession, PopulationPtr pPopulation) {
 		mSession->MeasureTotalTime(bind(&Strategy::Loop, this));
 
 		EA_LOG_TRACE << "Gen " << GetPopulation()->GetGeneration() << ", global hooks Generational" << flush;
-		hooks.InParallel(mSession, &Hook::Generational);
+		ExecuteInParallel("H", hooks, &Hook::Generational);
 	}
 
 	End();

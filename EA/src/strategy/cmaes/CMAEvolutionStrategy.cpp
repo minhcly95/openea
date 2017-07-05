@@ -198,7 +198,7 @@ void CMAEvolutionStrategy::Loop() {
 }
 
 vector<string> CMAEvolutionStrategy::GetTimeRecordOrder() const {
-	return { "S", "E", "U", "D" };
+	return { "S", "E", "U", "D", "H" };
 }
 
 VectorXd CMAEvolutionStrategy::RandomVector() {

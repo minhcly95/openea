@@ -26,6 +26,9 @@ namespace ea {
  */
 template<class T>
 class TypedMutator: public Mutator {
+	static_assert(is_base_of<Genome, T>::value,
+			"TypedMutator<T> : T must be a child of Genome.");
+
 public:
 	inline virtual ~TypedMutator() {
 	}

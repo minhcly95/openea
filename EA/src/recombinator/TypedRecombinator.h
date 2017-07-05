@@ -26,6 +26,9 @@ namespace ea {
  */
 template<class T>
 class TypedRecombinator: public Recombinator {
+	static_assert(is_base_of<Genome, T>::value,
+			"TypedRecombinator<T> : T must be a child of Genome.");
+
 public:
 	inline virtual ~TypedRecombinator() {
 	}

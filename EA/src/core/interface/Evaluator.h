@@ -19,6 +19,7 @@ public:
 
 	virtual ~Evaluator();
 
+	void SetSession(const SessionPtr& pSession);
 	OrganismPoolPtr Evaluate(const GenomePoolPtr& pGenomePool);
 
 	OrganismPoolPtr operator() (const SessionPtr& pSession, const GenomePoolPtr& pGenomePool);
@@ -26,6 +27,7 @@ public:
 protected:
 	virtual OrganismPoolPtr DoEvaluate(const GenomePoolPtr& pGenomePool) = 0;
 	void IncreaseEvaluationCount();
+	const SessionPtr& GetSession() const;
 
 private:
 	SessionPtr mSession;

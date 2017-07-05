@@ -27,9 +27,11 @@
 #include "../misc/Random.h"
 #include "../misc/Log.h"
 #include "../misc/Cluster.h"
+
 #include "../evaluator/FunctionalEvaluator.h"
 #include "../evaluator/ScalarEvaluator.h"
 #include "../evaluator/TypedScalarEvaluator.h"
+#include "../evaluator/PhenomeEvaluator.h"
 
 #include "../fitness/ScalarFitness.h"
 

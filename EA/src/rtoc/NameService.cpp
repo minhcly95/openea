@@ -76,6 +76,7 @@ NameService::InitStruct::InitStruct() {
 	// Core
 	ADD(OrganismPool);
 	ADD(GenomePool);
+	ADD(PhenomePool);
 	ADD(MetaPool);
 
 	// Initializer

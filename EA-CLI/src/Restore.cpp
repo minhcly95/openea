@@ -49,13 +49,14 @@ function<void(void)> Restore(istringstream& iss) {
 	}
 
 	return [token, gen] () {
-		CommandLineInterface::sPopulation = Restore::FromBackup(token, gen);
-
-		filesystem::path p(token);
-		if (filesystem::is_directory(p) || !filesystem::exists(p))
-			CommandLineInterface::sDefaultBackupFolder = p.string();
-		else
-			CommandLineInterface::sDefaultBackupFolder = p.parent_path().string();
+		CommandLineInterface::Register([token, gen] (StrategyPtr& strategy) {
+			CommandLineInterface::sPopulation = Restore::FromBackup(token, gen);
+			filesystem::path p(token);
+			if (filesystem::is_directory(p) || !filesystem::exists(p))
+				CommandLineInterface::sDefaultBackupFolder = p.string();
+			else
+				CommandLineInterface::sDefaultBackupFolder = p.parent_path().string();
+		});
 	};
 }
 

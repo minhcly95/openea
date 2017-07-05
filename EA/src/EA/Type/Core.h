@@ -13,6 +13,8 @@
 namespace ea {
 
 DEFINE_PTR_TYPE(Genome)
+DEFINE_PTR_TYPE(Phenome)
+DEFINE_PTR_TYPE_WITH_TEMPLATE(TypedPhenome)
 DEFINE_PTR_TYPE(Organism)
 DEFINE_PTR_TYPE(Recombinator)
 DEFINE_PTR_TYPE(Mutator)
@@ -23,6 +25,7 @@ DEFINE_PTR_TYPE(Initializer)
 DEFINE_PTR_TYPE(Population)
 DEFINE_PTR_TYPE(Pool)
 DEFINE_PTR_TYPE(GenomePool)
+DEFINE_PTR_TYPE(PhenomePool)
 DEFINE_PTR_TYPE(OrganismPool)
 DEFINE_PTR_TYPE(MetaPool)
 DEFINE_PTR_TYPE(Hook)

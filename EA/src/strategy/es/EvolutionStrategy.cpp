@@ -164,7 +164,7 @@ EvolutionStrategy::SelectionMode EvolutionStrategy::GetSelectionMode() const {
 }
 
 vector<string> EvolutionStrategy::GetTimeRecordOrder() const {
-	return { "S", "M", "E", "F" };
+	return { "S", "M", "E", "F", "H" };
 }
 
 } /* namespace ea */

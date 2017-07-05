@@ -31,6 +31,9 @@ DEFINE_PTR_TYPE(FunctionalEvaluator)
 DEFINE_PTR_TYPE_WITH_TEMPLATE(TypedScalarEvaluator)
 DEFINE_PTR_TYPE_WITH_TEMPLATE(TypedFunctionalEvaluator)
 
+DEFINE_PTR_TYPE(PhenomeDecoder)
+DEFINE_PTR_TYPE(PhenomeEvaluator)
+
 DEFINE_PTR_TYPE(ScalarFitness)
 
 DEFINE_PTR_TYPE(StandardOutputHook);

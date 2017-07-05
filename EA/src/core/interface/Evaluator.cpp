@@ -60,6 +60,29 @@ OrganismPoolPtr Evaluator::Evaluate(const GenomePoolPtr& pGenomePool) {
 }
 
 /**
+ * Get the Session running context.
+ * This Session object is only available when Evaluator is invoked via an Operator of OperatorGroup.
+ * Otherwise, this function throws an exception.
+ * @return The current Session running context.
+ */
+const SessionPtr& Evaluator::GetSession() const {
+	if (!mSession)
+	throw EA_EXCEPTION(EAException, SESSION_DEPENDENT,
+			"This Evaluator is Session-dependent. Evaluate() cannot be called.");
+	return mSession;
+}
+
+/**
+ * Set the Session running context.
+ * Use this function if users want to invoke the Evaluate() method within a specific Session context.
+ * It is only required if the implementation depends on Session (see GetSession()).
+ * @param pSession The Session running context.
+ */
+void Evaluator::SetSession(const SessionPtr& pSession) {
+	mSession = pSession;
+}
+
+/**
  * Helper function for child classes to increase the evaluation counter of Population.
  * This function only increases the counter if the operator is invoked with a Session
  * (which means operator()() is called instead of Evaluate()).
