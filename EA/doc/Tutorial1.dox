@@ -1,0 +1,277 @@
+namespace ea {
+
+/**
+
+@page tut1 How to solve the One-Max problem
+This page describes how to use the built-in operators to solve the One Max problem.
+
+@par Tutorial level
+Beginner
+
+@par Prerequisites
+Basic understanding about C++ and Evolutionary Computing.
+
+@par Next tutorial
+@ref tut2
+
+@tableofcontents
+
+@section tut1-problem One-Max problem
+The One-Max is a simple problem usually used as a demonstration of evolutionary algorithm.
+You can think of it as the "Hello World" program when you start learning a new programming language.
+The problem can be described as follow:
+
+@par One-Max problem
+Find a vector \f${\bf x}=\{x_1,x_2,...,x_n\}\f$ with \f$x_i\in\{0, 1\}\f$, that maximizes:
+
+\f[
+F({\bf x}) = \sum_{i=1}^n x_i
+\f]
+
+In other words, we need to find a bit string of 0s and 1s with the maximum number of 1s.
+The problem itself is easy, and we human would know the solution instantly, which is a vector of all 1s.
+We don't need to waste time to write a program to solve such an easy problem.
+However, writing "Hello World" to a piece of paper is also easy.
+What we need isn't to know how to solve the problem, but to know how to use the computer to solve it.
+
+@section tut1-desc Algorithm Description
+You need to have some understanding about evolutionary computing in order to under this part (and the rest of the tutorials).
+If it sounds unfamiliar to you, I recommend you to read some first chapters in the book
+* **Introduction to Evolutionary Computing**, 2nd Edition, 2015 by *A.E. Eiben* and *J.E. Smith*.
+In this tutorial series, I won't talk much about the details of the operators and the representations.
+
+It is a good practice to have some algorithm description before you implement your evolutionary algorithm.
+If you don't write it out, you will usually go off-track in this evolutionary mess. Here is the algorithm
+that will be implemented in this tutorial:
+
+<table>
+<tr>
+	<td>Representation</td>
+	<td>An array of bits (binary string) of length *n*</td>
+</tr>
+<tr>
+	<td>%Evaluation function</td>
+	<td>Sum of all bits in the string</td>
+</tr>
+<tr>
+	<td>Recombination</td>
+	<td>One-point crossover</td>
+</tr>
+<tr>
+	<td>Number of offspring</td>
+	<td>100% population size</td>
+</tr>
+<tr>
+	<td>Mutation</td>
+	<td>Flip bit</td>
+</tr>
+<tr>
+	<td>Individual mutation probability</td>
+	<td>10%</td>
+</tr>
+<tr>
+	<td>Gene mutation probability</td>
+	<td>1 / *n* </td>
+</tr>
+<tr>
+	<td>Parent selection</td>
+	<td>Uniform (random)</td>
+</tr>
+<tr>
+	<td>Survival selection</td>
+	<td>Greedy (select best)</td>
+</tr>
+<tr>
+	<td>%Population size</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>Initialization</td>
+	<td>%Random</td>
+</tr>
+<tr>
+	<td>Terminal condition</td>
+	<td>%Fitness value equals *n*</td>
+</tr>
+</table>
+
+In the following implementation, we will assign the length of bit string *n* = 50.
+
+@section tut1-impl Implementation
+Now you know what we will implement. I think it would be better if I show you the code first then explain it line-by-line.
+
+@subsection tut1-code The Code
+@includelineno Tutorials/OneMax/OneMax.cpp
+
+@subsection tut1-compile Compile and Run
+Compile this program while linking to the library with <b>C++14 standard</b>.
+@code
+g++ -std=c++14 -o OneMax OneMax.cpp -lopenea
+@endcode
+
+Here is the output example when run the program (some lines of the evolution process are omitted).
+It may not be the same on your machine because the evolutionary process is stochastic.
+@code
+[2017-06-27 10:40:42.940070] Parallel processing is enabled, number of threads = 4
+[2017-06-27 10:40:42.941184] Population initialized, evaluation 100
+[2017-06-27 10:40:42.941205] Evolution started from generation 0, evaluation 100
+Gen          1	Best =          36	11010101101010101111111110010111101101111011110111
+Gen          2	Best =          37	10111111001010101111111110010111101101111011110111
+Gen          3	Best =          37	10111111001010101111111110010111101101111011110111
+...
+Gen         24	Best =          49	11111111111111111111101111111111111111111111111111
+Gen         25	Best =          49	11111111111111111111101111111111111111111111111111
+Gen         26	Best =          50	11111111111111111111111111111111111111111111111111
+[2017-06-27 10:40:43.015243] FitnessTerminationHook: Reached fitness value = 50 == 50. Terminating...
+[2017-06-27 10:40:43.015302] Evolution stopped at generation 26, evaluation 2700
+[2017-06-27 10:40:43.015356] Time Report: [S] 0.819835 [M] 0.538455 [E] 1.19001 [F] 0.0369009 [Total] 2.66796 ms
+@endcode
+
+@subsection tut1-explain Code Explaination
+@dontinclude Tutorials/OneMax/OneMax.cpp
+
+First of all, you need to include the library header file in order to use any class out of it.
+@skipline include
+
+For convinience purpose, it is good to declare using the namespace \ref ea and \ref std.
+@skip using
+@until std
+
+To make our parameters more descriptive, we should define them as macro definitions.
+@skip define
+@until POP_SIZE
+
+Now we come to the main program.
+@skipline main
+
+First you need to create a Strategy object. The Strategy interface represents an evolutionary algorithm.
+It contains all the operators and configurations.
+You can think a Strategy object is a representation of our algorithm description above.
+Different kinds of algorithms require different Strategy.
+In this example, we use the simplest implementation of Strategy which is EvolutionStrategy.
+You create an EvolutionStrategy object by calling its constructor with the population size using #std::make_shared().
+A Strategy must be always created in the form of smart pointer. If you don't know what a smart pointer is, just copy the code for now.
+If you don't know what to pass into the constructor, check the API documentation of EvolutionStrategy.
+
+@skipline POP_SIZE
+
+A Strategy is just a frame of execution, it needs real operators in order to work.
+For EvolutionStrategy, you need to add an Initializer, Evaluator, Selector and at least a Recombinator and Mutator.
+You can add the operators in any order, it doesn't matter for operators with different categories.
+I prefer to add the initialization method first.
+
+The initialization method is represented in the library as an Initializer.
+The Initializer will also determine which representation will be used in the algorithm.
+We will use the representation @ref BoolArrayGenome (a bit string) with random initialization method,
+therefore we will add a @ref BoolRandomArrayInitializer to the Population. If you wonder how can you
+know which operator is available in the library, check the page @ref operators.
+
+@skipline initializer
+
+In the line above, @tt{strategy->initializer} is an Operator wrapper, and the function Operator::Create<O>()
+will create an instance of class @tt{O} and the arguments gave to the function will be forwarded to the constructor of type @tt{O}.
+So the operator that we've just created is the same to the one when we call the constructor:
+@code
+BoolRandomArrayInitializer(GENOME_LENGTH)
+@endcode
+The newly created object will be added to the corresponding operator category (@ref EvolutionStrategy::initializer in this case).
+
+Using such syntax, we can add our mutation operator to the EvolutionStrategy. The interface for mutation is Mutator
+and the class we'll use is FlipBitMutation.
+
+@skipline mutators
+
+Notice, in this time, we used Operator::CreateBase<O>() instead of Operator::Create<O>(). The difference between the two functions
+is Operator::Create<O>() creates and returns an object of type @tt{O} and Operator::CreateBase<O>() still creates an object of class @tt{O}
+but then use it to creates and returns another object of the wrapped Operator type.
+The wrapped type in this case is MetaMutator (you can check by seeing @ref EvolutionStrategy::mutators type),
+which wraps a Mutator (mutation operator) with a mutation rate.
+Therefore you can set the rate by using the cascading function MetaMutator::Rate(). If this is too complicate for you,
+just use it for now.
+
+Now we will add our recombination operator (Recombinator interface, I guess now you can figure out the naming convention).
+We will add the @ref BoolOnePointCrossover with UniformSelection as the parent selection method by using the similar syntax:
+
+@skipline recombinators
+
+Again, we used the function Operator::CreateBase<O>() because we don't want to get the @ref BoolOnePointCrossover object, but the
+wrapped Operator type which is MetaRecombinator, so we can use cascading functions such as MetaRecombinator::Parent() for parent selection method
+and MetaRecombinator::Ratio() for offspring ratio. In a nutshell, only use Operator::CreateBase<O>() if you need to use cascading functions.
+
+The syntax of adding the survival selection method (Selector interface, the same interface with UniformSelection above) looks normal again:
+
+@skipline survivalSelector
+
+Finally, we will create our evaluation function next. This is the hardest part, because now you need to write for yourself some line of codes.
+The interface for it in the library is Evaluator. Because the evaluation method is problem-dependent,
+the library can't provide you any built-in class for the Evaluator.
+But it provides you instead a way to define an Evaluator in-place which is called TypedFunctionalEvaluator.
+Basically, what you need is a std::function which accepts an object with the type of the representation (@ref BoolArrayGenome in this case)
+and produces a fitness value of type double. You can make this std::function by simply creating a lambda function in C++:
+
+@skip evaluator
+@until });
+
+If you wonder what is @ref BoolArrayGenomePtr, it is the typedef name for @ref std::shared_ptr<BoolArrayGenome>.
+Every class in the library also comes with an alias name for the smart pointer type
+by adding the suffix <code>-Ptr</code> to the class name.
+If you don't know what a smart pointer is, just use it as a normal pointer but don't delete it. It will
+automatically be deleted just like the garbage collection feature in Java and C#.
+
+Before starting the evolution process, you need to specify the output mechanism and also the termination condition.
+The library classifies all other features which don't affect to the evolution process into Hook category.
+A Hook is a segment of custom code which will be run each generation. In this tutorial, we will use the StandardOutputHook to print
+out the best individual of each generation and the FitnessTerminationHook as the termination condition.
+
+@skip hooks
+@until Termination
+
+You can check the API description to know which arguments that a type needs for its constructor.
+For example, for the FitnessTerminationHook, you can look at here FitnessTerminationHook::FitnessTerminationHook().
+
+The last thing that you need to do is calling Strategy::Evolve() and enjoy the result.
+
+@skip Evolve
+@until }
+
+@section tut1-conclusion Conclusion
+This tutorial has shown you how to write a simple program using EA library to solve the One-Max problem.
+We knew how to translate a simple algorithm description into a real implementation by following these steps:
+
+- Create a EvolutionStrategy and specify the population size.
+- Add operators into the newly created Population object:
+	- Initialization: @ref EvolutionStrategy::initializer
+	- Mutation: @ref EvolutionStrategy::mutators
+	- Recombination: @ref EvolutionStrategy::recombinators
+	- Survival selection: @ref EvolutionStrategy::survivalSelector
+	- Evaluation function: @ref EvolutionStrategy::evaluator
+	- Termination condition and Output: @ref EvolutionStrategy::hooks
+- Call EvolutionStrategy::Evolve() to start the evolution process.
+
+In the next tutorial, you will know how to solve the One-Max problem again by using the CLI toolset:
+
+@ref tut2
+
+@subsection tut1-note Note
+No matter which order you add the operators into the EvolutionStrategy,
+the execution of operators in still the same.
+You can customize it by using other Strategy, but for this simple problem, just use the simplest one.
+The detailed execution loop is:
+- Spawning (Recombination)
+- Mutation
+- Evaluation
+- Filtering (Survival selection)
+- %Hook execution 
+
+You cannot have multiple Initializer, survival Selector, or Evaluator in the same EvolutionStrategy.
+If you create another one, the old one will be discarded.
+
+However, you can have multiple Mutator, Recombinator (with its parent Selector) and Hook in the same EvolutionStrategy.
+Mutator and Hook will be executed in series, one after another
+(now, it depends on the order that you add the operators).
+Recombinator will spawn children in parallel. So having two Recombinator whose offspring ratio is equal to 1,
+will spawn 200 children for a population with size of 100 (100 children from each Recombinator).
+
+ */
+
+}

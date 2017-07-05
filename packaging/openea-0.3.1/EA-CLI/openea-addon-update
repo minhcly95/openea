@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ ! -d ~/.openea/addon ]; then
+	mkdir -p ~/.openea/addon
+fi
+cd ~/.openea/addon
+echo Add-on Directory: $(pwd)
+echo Found:
+find . -name "*.h" -o -name "*.hpp"
+echo
+
+find . -name "*.h" | sed -e "s/^\.\//#include \"addon\//" -e "s/$/\"/" > "../Add-on.h"
+echo Header file created at $(realpath ../Add-on.h).
+echo
+
+SHAREDIR=/usr/share/libopenea-cli
+
+echo Invoking Make...
+cd ..
+cp -f $SHAREDIR/Add-on.cpp ./
+make -f $SHAREDIR/addon-make
+echo Add-on updated.
+echo

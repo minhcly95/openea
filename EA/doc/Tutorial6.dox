@@ -1,0 +1,405 @@
+namespace ea {
+
+/**
+
+@page tut6 Deploy an algorithm on a %Cluster
+This page describes how to use the distributed computation feature to deploy your algorithm on a cluster.
+
+@par Tutorial level
+Intermediate
+
+@par Previous tutorial
+@ref tut5
+
+@tableofcontents
+
+@section tut6-cluster Cluster computation
+First, for those people who don't know what a cluster is, a <b>Computer cluster</b> is just a set of connected computers.
+People use clusters to speed up their computation, similar to multi-threading, but at a much more greater scale.
+Multi-threading depends on the number of cores in your machine, but you can't increase the number of cores in your CPU
+easily. Sometimes, it is cheaper to buy a second machine (and a third one, and so on) with a bunch of Ethernet cables
+and this is when cluster computation comes in. But if you don't have a second machine (or machines), cluster computation can
+still benefit you, so please read until the end of this section.
+
+In multi-threading, <b>threads</b> are the factor which speeds up your program. A simple program only uses a thread, and hence utilizes only a CPU core.
+But your computer has many cores, so more threads spawned mean more CPU cores utilized and more computation done (of course, if you only have four cores,
+then a fifth thread will be redundant and may slow down your program). Similarly, cluster computation spawns multiple <b>processes</b>
+to get things done faster, but you can spawn processes on other machines, while with threads, you can't. However, threads use
+shared memory to communicate while processes have their own memory space, therefore, they must communicate via another method.
+In this library, we use Message Passing Interface (MPI) and its implementation, the OpenMPI library, as the communication method.
+Basically, using MPI, processes communicate with each others via messages on TCP/IP, and messages passing takes time. If you need to
+parallelize something which takes only 1 ms, MPI will not speed it up, but slow it down. However, if "something" takes more than 1 second,
+MPI will start making your program faster.
+
+@note
+You need to experiment to know whether cluster computation really speeds up your program.
+It depends on the size of data and the computational time of the parallelized part of the program.
+But roughly, if the parallelized part to many seconds or minutes each generation, this likely will speed it up.
+
+In OpenEA, there are two types of cluster deployment: locally and remotely. Deploying a cluster locally means
+you just spawn multiple processes on the same machine, while remote deployment is spawning processes on another machines
+(may include yours also). They will behave the same, but different in deployment process. Spawning processes on the same machine
+doesn't require copying any files, because they are already there. Deploying a program remotely requires you to copy that program to every
+remote machines, and also its dependencies. Thankfully, the framework can boost up this process by automating a part of that process,
+but you still need to be aware of what is going on in your cluster.
+
+But why do we need local cluster deployment while we can use multi-threading which is a much more efficient solution?
+The answer is: sometimes, your program cannot be parallelized using multi-threading. For example, your program uses an external
+library which manages everything using static classes, but you want to spawn multiple instances in parallel. In such example, the only way
+is to spawn multiple processes on the same machine and hence local cluster deployment. Now, if you think this won't benefit you in either ways:
+doing computation on multiple machines, or parallelizing something which cannot be done by multi-threading, you can skip this tutorial.
+
+@section tut6-cli Deploy an EAML configuration file
+Normally, we will start with a C++ example (@tut{1}, @tut{4}), then make it available to the CLI (@tut{2}, @tut{5}).
+But in this tutorial, we will do the opposite, because deploy an EAML configuration file is much more easier than the other option.
+
+@subsection tut6-localcli Local deployment
+To run an EAML file normally, as mention in @tut{2} and @tut{5}, we use this command:
+
+@code
+openea run <eaml_file> <options>
+@endcode
+
+To deploy it locally, you only need to insert @cmd{cluster local} before the @cmd{run} keyword:
+
+@code
+openea cluster local run <eaml_file> <options>
+@endcode
+
+You can test on the EAML file we edit in @tut{5}:
+
+@code
+openea cluster local run SphereOpt.eaml
+@endcode
+
+The output of the run will look like this:
+
+@code
+[2017-06-29 09:23:05.498020] PluginLoader: Loaded 1 plugin(s).
+[2017-06-29 09:23:05.498062] CLI: Reading SphereOpt.eaml
+[2017-06-29 09:23:05.498295] CLI: "EvolutionStrategy" reconstructed
+[2017-06-29 09:23:05.498351] CLI: BackupHook not found. Default one added to folder "~/.openea/.backup".
+[2017-06-29 09:23:05.518845] Cluster deployed, size = 4
+[2017-06-29 09:23:05.518877] Cluster Slave node #1 on bqminh-pc started
+[2017-06-29 09:23:05.518876] Cluster Slave node #3 on bqminh-pc started
+[2017-06-29 09:23:05.518883] Cluster Slave node #2 on bqminh-pc started
+[2017-06-29 09:23:05.518899] Parallel processing is disabled
+[2017-06-29 09:23:05.520112] BackupHook::DoInitial: Cleared 1 file(s) in "~/.openea/.backup".
+[2017-06-29 09:23:05.520135] Population initialized, evaluation 100
+[2017-06-29 09:23:05.520152] Evolution started from generation 0, evaluation 100
+...
+[2017-06-29 09:24:35.796488] GenerationTerminationHook: Reached generation #10000 >= 10000. Terminating...
+[2017-06-29 09:24:35.797089] BackupHook: Backup saved to "~/.openea/.backup/010000.eabak".
+[2017-06-29 09:24:35.797191] Evolution stopped at generation 10000, evaluation 1000100
+[2017-06-29 09:24:35.797271] Time Report: [S] 0.169562 [M] 0.00905972 [E] 1.4072 [F] 0.0960419 [Total] 1.75672 ms
+[2017-06-29 09:24:35.799692] Cluster Slave node #1 on bqminh-pc shut down
+[2017-06-29 09:24:35.799768] Cluster Slave node #3 on bqminh-pc shut down
+[2017-06-29 09:24:35.800616] Cluster Slave node #2 on bqminh-pc shut down
+@endcode
+
+First of all, we can notice these line announcing that the cluster has been deployed:
+
+@code
+[2017-06-29 09:23:05.518845] Cluster deployed, size = 4
+[2017-06-29 09:23:05.518877] Cluster Slave node #1 on bqminh-pc started
+[2017-06-29 09:23:05.518876] Cluster Slave node #3 on bqminh-pc started
+[2017-06-29 09:23:05.518883] Cluster Slave node #2 on bqminh-pc started
+@endcode
+
+Then, multi-threading is disabled, because using cluster computation disables multi-threading automatically:
+
+@code
+[2017-06-29 09:23:05.518899] Parallel processing is disabled
+@endcode
+
+@note
+You can forced enable multi-threading by using @tt{-p} option in the CLI (see @tut{3}).
+
+Finally, you can see that the cluster has been shut down at the end of the program:
+
+@code
+[2017-06-29 09:24:35.799692] Cluster Slave node #1 on bqminh-pc shut down
+[2017-06-29 09:24:35.799768] Cluster Slave node #3 on bqminh-pc shut down
+[2017-06-29 09:24:35.800616] Cluster Slave node #2 on bqminh-pc shut down
+@endcode
+
+@note
+Pressing @tt{Ctrl+C} will terminate the CLI, but it will take time (several seconds to half minute) to shut down the cluster.
+This is normal behaviour, but you may get confused because the message doesn't show immediately.
+
+@subsection tut6-remotecli Remote deployment
+Before you can deploy a cluster remotely, you must configure the CLI so it knows which machines are in the cluster.
+You only need to do this once by editing a file named @cmd{cluster.conf} which can be accessed directly using the command:
+
+@code
+openea edit cluster
+@endcode
+
+The content of the file should be similar to the following example:
+
+@code
+localhost             max-slots=4
+user1@192.168.0.101   max-slots=4
+user2@192.168.0.102   max-slots=5
+user3@192.168.0.103   max-slots=8
+@endcode
+
+Where @tt{user1}, @tt{user2}, @tt{user3} are the user name on each machine.
+@tt{max-slots} indicates the maximum number of processes that you can spawned on each machine.
+You can edit the file @cmd{/etc/hosts} to give your machines a readable name but that is not required.
+However, it is required to have @tt{localhost} as the first machine in the file.
+You want the first process to be on your machine, otherwise back-up files and other stuff won't be saved on that machine.
+Save the cluster configuration file and use this command to launch the program remotely.
+
+@code
+openea cluster remote run <eaml_file> <options>
+@endcode
+
+For example:
+
+@code
+openea cluster remote run SphereOpt.eaml
+@endcode
+
+It will automate (a part) of the copying process for you:
+
+@code
+Copying CLI and plugins to localhost...
+
+openea-run                                                100%  174KB 174.2KB/s   00:00
+libopenea.so                                              100%  224KB 224.3KB/s   00:00
+libopenea_addon.so                                        100%  224KB 224.3KB/s   00:00
+plugin-remote.conf                                        100%   12     0.0KB/s   00:00
+SphereOpt.eaml                                            100%  692     0.7KB/s   00:00
+libopenea_SO.so                                           100%  181KB 180.6KB/s   00:00
+remotelaunch.sh                                           100%  436     0.4KB/s   00:00
+
+...
+
+Launching...
+@endcode
+
+What the framework will copy for you:
+- The EAML file itself
+- The @cmd{"openea run"} executable
+- The core library
+- The add-on library
+- The modified @tt{plugin.conf} file
+- All plugins found in @tt{plugin.conf}
+- A shell script used to launch on remote machines
+
+If your plugins depend on other external libraries, you must install those libraries in all remote machines (via @cmd{apt-get}
+or other ways). Another method is to copy the binary files of the libraries by yourself. The framework provides
+you a convinient way to copy any file or folder to all configured remote machines. To copy a file or folder, use this command:
+
+@code
+openea cluster remote populate <file_name>
+@endcode
+
+@warning
+It is partly your responsibility to ensure all dependencies are installed in all remote machines.
+The framework can automate this process but it cannot cover all your requirements.
+
+@section tut6-exec Deploy an Executable program
+@subsection tut6-localexec Modification
+Using the CLI and EAML configuration file, any operator which is able ro be parallelized on cluster will be automically deployed.
+However, if you want to write a C++ style program, you must add the operator manually.
+In this tutorial, we will modify the @ref SphereOpt.cpp program in @tut{4} to make it work with cluster compuation.
+We need to modify the main function as follow:
+
+@code
+int main() {
+	EvolutionStrategyPtr strategy = make_shared<EvolutionStrategy>(POP_SIZE);
+
+	...
+
+	auto evaluator = strategy->evaluator.Create<TypedFunctionalEvaluator<DoubleArrayGenome>>( [] (const DoubleArrayGenomePtr& genome) {
+		...
+	});
+
+	...
+
+	Cluster::AddOperator(evaluator);
+
+	SessionPtr session = strategy->Evolve();
+
+	Cluster::Destroy();
+
+	return 0;
+}
+@endcode
+
+First, we catch to returned object from @tt{strategy->evaluator.Create()} to get an IndividualEvaluator object
+(@tt{auto} is just a keyword to deduce the type automatically). Then, right before @tt{strategy->Evolve()},
+you call Cluster::AddOperator() to add the IndividualEvaluator object. Finally, call Cluster::Destroy() to
+shut down the cluster properly. Recompile it just like in @tut{4} and we are ready to deploy the executable.
+
+@note
+You cannot add anything to the Cluster using Cluster::AddOperator(), only classes derived from ClusterComputable can be added
+(e.g. IndividualEvaluator and its children). See @ref tut6-appendix to know how to write such a class.
+
+@note
+However, you can have multiple operators deployed in your cluster by calling Cluster::AddOperator() multiple times (before Strategy::Evolve()).
+That's why the function name is @tt{"AddOperator"}, not @tt{"SetOperator"}.
+
+@subsection tut6-remoteexec Deployment
+The deployment is exectly the same with EAML file deployment, but this time, change the keyword @cmd{"run"} into @cmd{"exec"}.
+For example, to deploy the above executable locally, use:
+
+@code
+openea cluster local exec SphereOpt
+@endcode
+
+And for remote deployment, use this command:
+
+@code
+openea cluster remote exec SphereOpt
+@endcode
+
+The same warning about dependencies is also applied here.
+
+@section tut6-conclusion Conclusion
+In this tutorial, you have learned how to deploy your program in either form: EAML configuration file with plugins,
+and executable file compiled from C++. In short, you can deploy a program by using the command:
+
+@code
+openea cluster local|remote run|exec
+@endcode
+
+In the case of remote deployment, you must:
+- Configure the cluster using @cmd{openea edit cluster}.
+- Make sure all dependencies are installed on remote machines.
+
+In the case of deployment of executable file, you must:
+- Add the operators you want to deploy using Cluster::AddOperator().
+- Call Cluster::Destroy() to shut down the cluster properly.
+
+@note
+More tutorials are coming!
+
+@section tut6-appendix Appendix: Write a Cluster computable class
+This section shows you how to write a simple custom ClusterComputable class calculating, e.g., the square of a double number.
+You can consult the API documentation of ClusterComputable class to know the signature of its functions.
+
+ClusterComputable is a template class which requires two types: input type @cmd{InputT} and output type @cmd{OutputT}.
+In this example (calculating the square of a number), @tt{InputT} and @tt{OutputT} would be both @tt{double} type, so we will
+derive our class (e.g. @tt{SquareCalculator}) from @tt{ClusterComputable<double, double>}:
+
+@code
+#include <openea/misc/ClusterComputableImpl.h>
+
+using namespace std;
+using namespace ea;
+
+class SquareCalculator : public ClusterComputable<double, double> {
+	...
+}
+@endcode
+
+@note
+You need to include the file @cmd{<openea/misc/ClusterComputableImpl.h>} explicitly. This file
+is not included in @tt{<openea/EA.h>} to speed up the compile time in normal case.
+
+Then you need to override the method ClusterComputable::ProcessOnRemote(). This is the segment of code
+which will be run on remote processes. Here you implement the calculation:
+
+@code
+virtual double ProcessOnRemote(const double& pInput) override {
+	return pInput * pInput;
+}
+@endcode
+
+@warning
+The @tt{InputT} and @tt{OutputT} must satisfy the BinarySerializer condition (that means it can be (de)serialized by BinarySerializer).
+Primary types, string, simple structs/classes, std::vector, std::map and std::shared_ptr of Storable (and its children) are supported by default.
+In this case, @tt{double} is primary type so it is supported.
+Otherwise, you must implement a specialization of BinarySerializer for your type. See BinarySerializer for details.
+
+Finally, create a function which call the method ClusterComputable::ExecuteInCluster():
+
+@code
+vector<double> Calculate(const vector<double>& pInputArray) {
+	return ExecuteInCluster(pInputArray);
+}
+@endcode
+
+This is where cluster computation comes in. The function ClusterComputable::ExecuteInCluster() will distribute your input vector to worker processes (slave nodes).
+Then it aggregates all the output from those processes to produce a vector of the same size. Each entry in the output vector is corresponding
+to the input vector at the same position. Here is the full code that you can test with:
+
+@code
+#include <iostream>
+#include <openea/EA.h>
+#include <openea/misc/ClusterComputableImpl.h>
+
+using namespace std;
+using namespace ea;
+
+class SquareCalculator : public ClusterComputable<double, double> {
+public:
+	virtual double ProcessOnRemote(const double& pInput) override {
+		return pInput * pInput;
+	}
+	vector<double> Calculate(const vector<double>& pInputArray) {
+		return ExecuteInCluster(pInputArray);
+	}
+};
+
+int main() {
+	auto sqrCalc = make_shared<SquareCalculator>();
+
+	Cluster::AddOperator(sqrCalc);
+
+	Cluster::Deploy();
+
+	vector<double> input = {1, 2, 3, 4, 5};
+	vector<double> result = sqrCalc->Calculate(input);
+
+	for (double number: result)
+		cout << number << endl;
+
+	Cluster::Destroy();
+}
+@endcode
+
+However, you must compile it with @cmd{mpic++} instead of @tt{g++}:
+
+@code
+mpic++ --std=c++14 -o SquareCalculator SquareCalculator.cpp -lopenea
+@endcode
+
+@note
+You only need to compile a source file with @tt{mpic++} if it contains the function ClusterComputable::ExecuteInCluster() directly.
+For other files, you can compile them normally.
+
+Execute the generated executable using the command:
+
+@code
+openea cluster local exec SquareCalculator
+or
+openea cluster remote exec SquareCalculator
+@endcode
+
+The output of the program may look like:
+
+@code
+[2017-06-29 14:05:36.051314] Cluster deployed, size = 4
+[2017-06-29 14:05:36.051341] Cluster Slave node #1 on bqminh-pc started
+[2017-06-29 14:05:36.051341] Cluster Slave node #3 on bqminh-pc started
+[2017-06-29 14:05:36.051350] Cluster Slave node #2 on bqminh-pc started
+1
+4
+9
+16
+25
+[2017-06-29 14:05:36.053921] Cluster Slave node #2 on bqminh-pc shut down
+[2017-06-29 14:05:36.054050] Cluster Slave node #3 on bqminh-pc shut down
+[2017-06-29 14:05:36.055229] Cluster Slave node #1 on bqminh-pc shut down
+@endcode
+
+It shows that we have successfully calculated the square of 5 numbers using cluster computation.
+Next, you could try experimenting this example with more data or implementing another class by yourself.
+
+ */
+
+}

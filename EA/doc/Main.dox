@@ -1,0 +1,93 @@
+using namespace std;
+
+namespace ea {
+
+/**
+
+@mainpage OpenEA Framework Documentation
+
+@section main-intro Introduction
+Welcome to the website of the OpenEA project. The OpenEA project is an open-source framework
+for Evolutionary Computing built in C++. The framework is general-purpose and can be expanded
+to fit any demand without sacrificing speed and reusability. Here are the main features of the framework:
+
+- General interface for representations and fitness: Genome, Fitness, Pool
+- General interface for operators: Variator, Selector, Evaluator
+- General interface for algorithms: Strategy, Operator
+- Two programming options: C++ code or EAML configuration file
+- Powerful Command-Line Interface (CLI) allowing fast configuration
+- Plugin loader which loads user code without recompiling
+- Parallelism via MultiThreading or Distributed Computatation on Cluster
+- Back-up to and %Restore from file system
+- Speed tracker (both generational and for each phase)
+
+The OpenEA framework is distributed using
+<a href="https://www.gnu.org/licenses/gpl-3.0.en.html">GNU General Public License version 3</a>.
+The framework is written and maintained by <a href="mailto:minhcly95@outlook.com">Bùi Quang Minh</a>.
+
+@note
+The framework is in the Alpha state, therefore please expect changes in API.
+
+@section main-install Installation
+Currently, the framework is only tested on Ubuntu 16.04 system.
+There are two ways to install the framework: from Ubuntu Launchpad (@cmd{apt-get}) and directly from GitHub.
+
+@subsection main-apt Ubuntu Launchpad
+To install the framework using @cmd{apt-get}, first, add the following PPA to your system:
+
+@code
+sudo add-apt-repository ppa:minhcly95/openea
+sudo apt-get update
+@endcode
+
+Then, install the package @tt{libopenea-cli} which includes both the library and the CLI tool:
+
+@code
+sudo apt-get install libopenea-cli
+@endcode
+
+To test the installation, enter the command:
+
+@code
+openea
+@endcode
+
+And a list of available sub-commands should be printed on the terminal. 
+
+@subsection main-github GitHub
+To install from GitHub, first, clone the repository to your computer:
+
+@code
+git clone https://github.com/minhcly95/openea.git
+@endcode
+
+Then, run the Makefile using the command:
+
+@code
+sudo make install
+@endcode
+
+This command will compile the source and create symbolic <b>links</b> to the binary and source files,
+so you can include and link them any where on your machine.
+To test the installation, enter the command:
+
+@code
+openea
+@endcode
+
+And a list of available sub-commands should be printed on the terminal. 
+
+@section main-howtouse How to use
+For new users, it is recommended to read the @ref tutorials page to get used to the framework.
+More tutorials are being written, so don't be disappointed.
+All available operators are described in the @ref operators page. For more information, check the
+API documentation of each class.
+
+@note
+Users of the library should understand the basic operation of Evolutionary Computing and C++ programming.
+If you don't know what is an Evolutionary Algoithm, I recommend the book 
+* **Introduction to Evolutionary Computing**, 2nd Edition, 2015 by *A.E. Eiben* and *J.E. Smith*.
+
+ */
+
+}

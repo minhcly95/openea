@@ -1,0 +1,2 @@
+#!/bin/bash
+rm *.deb *.dsc *.changes *.ppa.upload *.build *.debian.tar.xz

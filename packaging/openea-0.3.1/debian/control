@@ -1,0 +1,25 @@
+Source: openea
+Maintainer: Bui Quang Minh <minhcly95@outlook.com>
+Section: science
+Priority: optional
+Standards-Version: 3.9.7
+Build-Depends: debhelper (>= 9), libboost-system1.63-dev, libboost-filesystem1.63-dev, libboost-log1.63-dev, libboost-thread1.63-dev, libtinyxml2-dev, libopenmpi-dev, libeigen3-dev, wcstools, librestbed-dev
+
+Package: libopenea0
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libboost-system1.63-dev, libboost-filesystem1.63-dev, libboost-log1.63-dev, libboost-thread1.63-dev, libtinyxml2-dev, libopenmpi-dev, libeigen3-dev, wcstools, librestbed-dev
+Description: OpenEA library
+ General-purpose Evolutionary Computing Framework.
+
+Package: libopenea-dev
+Architecture: any
+Section: libdevel
+Depends: ${misc:Depends}, libopenea0 (= ${binary:Version})
+Description: OpenEA library - development package
+ OpenEA library with header files for C++ developers.
+
+Package: libopenea-cli
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libopenea-dev
+Description: OpenEA library - Command Line Interface
+ Command Line Interface for OpenEA library.

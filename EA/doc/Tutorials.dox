@@ -1,0 +1,21 @@
+namespace ea {
+
+/**
+
+@page tutorials Tutorials
+This page contains links to various useful tutorials to show you how to use the library.
+
+Here is the list of available tutorials:
+- Beginner
+	- @subpage tut1
+	- @subpage tut2
+	- @subpage tut3
+- Intermediate
+	- @subpage tut4
+	- @subpage tut5
+	- @subpage tut6
+
+
+ */
+
+}

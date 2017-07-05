@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Population size="10">
+	<initializer>
+		<TestInitializer/>
+	</initializer>
+	<evaluator>
+		<MasterConstructible attr="20">
+		</MasterConstructible>
+	</evaluator>
+	<recombinators>
+		<TestRecombinator/>
+	</recombinators>
+	<mutators>
+		<TestMutator/>
+	</mutators>
+	<survival-selector>
+		<TestSelector/>
+	</survival-selector>
+</Population>

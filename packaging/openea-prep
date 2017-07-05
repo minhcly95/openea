@@ -1,0 +1,25 @@
+#!/bin/bash
+LIBDIR=openea-$1
+
+echo Cleaning...
+mkdir -p $LIBDIR/EA/src
+mkdir -p $LIBDIR/EA/include/openea
+mkdir -p $LIBDIR/EA-CLI/src
+
+rm -rf $LIBDIR/EA/src/*
+rm -rf $LIBDIR/EA/include/openea/*
+rm -rf $LIBDIR/EA-CLI/src/*
+
+echo Copying files...
+rsync -am -f '- pch.h.*' -f '+ *.cpp' -f '+ *.h' -f '- /archive/' -f '- /test/' -f '- /example/' -f 'hide,! */' ../EA/src/ $LIBDIR/EA/src
+rsync -am -f '- pch.h*' -f '+ *.h' -f '- /archive/' -f '- /test/' -f '- /example/' -f 'hide,! */' ../EA/src/ $LIBDIR/EA/include/openea
+rsync -am -f '- Add-on.*' -f '+ *.cpp' -f '+ *.h' -f '- /test/' -f 'hide,! */' ../EA-CLI/src/ $LIBDIR/EA-CLI/src
+
+echo Create tarball...
+cd $LIBDIR
+make clean
+cd ..
+tar --exclude="$LIBDIR/debian" -zcf openea_$1.orig.tar.gz $LIBDIR
+
+echo Done.
+

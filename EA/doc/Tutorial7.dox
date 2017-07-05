@@ -1,0 +1,23 @@
+namespace ea {
+
+/*
+
+@page tut7 Write a custom %Strategy
+This page describes how to write a custom Strategy to implement your own algorithm.
+
+@par Tutorial level
+Advanced
+
+@par Previous tutorial
+@ref tut6
+
+@par Next tutorial
+Not decided yet
+
+@tableofcontents
+
+@section tut7-conclusion Conclusion
+
+ */
+
+}

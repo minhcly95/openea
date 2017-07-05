@@ -1,0 +1,477 @@
+using namespace std;
+
+namespace ea {
+
+/**
+
+@page operators Built-in Classes
+This page describes all built-in operators, interfaces and strategies which are available in the library.
+
+@tableofcontents
+
+All of the built-in classes are under the namespace <code>ea</code>.
+All operators are registered to the NameService and may have more than one EAML alias name.
+Interfaces, in the other hand, are only templates and must be overridden before use.
+Strategies are the implementation of the algorithms themselves, and are children of the
+Strategy interface. 
+
+Users are not restricted to use only these operators, interfaces and strategies.
+However, if an external library uses those interfaces,
+its operators can also be used to fill in the slots in existed strategies such as DefaultStrategy.
+External libraries can re-use built-in Genome and Fitness, or write custom ones for themselves.
+
+@section op_strategies Strategies
+First we need to look on which strategies are available in the system.
+Strategies are derived from Strategy interface, which contains many useful features
+for algorithm implementation. For more details, please see Strategy. Here is the list
+of available strategies:
+
+<table>
+	<tr>
+		<th>Class</th>
+		<th>EAML name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>EvolutionStrategy</td>
+		<td><code>%EvolutionStrategy</code></td>
+		<td>The implementation of the \f$(\mu, \lambda)\f$-ES algorithm,
+		which is easy to use for beginners.</td>
+	</tr>
+	<tr>
+		<td>CMAEvolutionStrategy</td>
+		<td><code>%CMAEvolutionStrategy</code></td>
+		<td>The implementation of the \f$(\mu / \mu_w, \lambda)\f$-CMA-ES algorithm,
+		which is used to optimize a @ref DoubleArrayGenome efficiently.</td>
+	</tr>
+</table>
+
+@section op_data Data Interfaces and Implementations
+This part lists all the built-in interfaces and implementations for data.
+All data classes are children of Storable and therefore can be stored in binary format.
+Data classes are divided into three categories: Genome, Fitness and Pool.
+
+@subsection op_genome Genome
+This category is represented by the interface Genome, which generalizes the representation of genotype.
+This is the target for variation operators and the input of evaluation function.
+
+<table>
+	<tr>
+		<th>Class</th>
+		<th>EAML name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>ArrayGenome</td>
+		<td>
+			<code>%BoolArrayGenome</code><br>
+			<code>%IntArrayGenome</code><br>
+			<code>%DoubleArrayGenome</code>
+		</td>
+		<td>Linear representation in form of an array. Each element is called a gene
+		which could be a custom type.
+		Genes of type @tt{bool}, @tt{int} and @tt{double} are registered in NameService.</td>
+	</tr>
+	<tr>
+		<td>PermutationGenome</td>
+		<td><code>%PermutationGenome</code></td>
+		<td>Permutation representation in form of an array of @tt{uint}.</td>
+	</tr>
+</table>
+
+@subsection op_fitness Fitness
+Fitness is the most general interface for this category, which stores the fitness value
+of an evaluation. It can be combined with Genome to create an Organism object which represents
+an evaluated organism. Deriving from Fitness interface requires users to define a comparison
+method between Fitness objects.
+
+<table>
+	<tr>
+		<th>Class</th>
+		<th>EAML name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>ScalarFitness</td>
+		<td><code>%ScalarFitness</code></td>
+		<td>Implementation for a single real fitness value.
+		It also stores the direction of the optimizer (minimizer or maximizer).</td>
+	</tr>
+</table>
+
+@subsection op_pool Pool
+Pool is the interface for container type which can be stored in a Population.
+The interface contains nothing and is used only to generalize Population storage.
+
+<table>
+	<tr>
+		<th>Class</th>
+		<th>EAML name</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>GenomePool</td>
+		<td><code>%GenomePool</code></td>
+		<td>A vector of Genome. This is used widely in operator interface definition.</td>
+	</tr>
+	<tr>
+		<td>OrganismPool</td>
+		<td><code>%OrganismPool</code></td>
+		<td>A vector of Organism. This is used widely in operator interface definition.</td>
+	</tr>
+	<tr>
+		<td>MetaPool</td>
+		<td><code>%MetaPool</code></td>
+		<td>A map from @tt{uint} to @ref PoolPtr. This is used to aggregate many Pool into a single Pool and build a hierarchy of Pool.</td>
+	</tr>
+</table>
+
+@section op_operators Operator Interfaces
+The library comes with a lot of operator interfaces, organizes them in a logical order.
+%Operator interfaces in the library must fulfill a criteria: Operator-compatibility.
+An interface which is Operator-compatible is an interface which can be used as the template parameter
+of Operator and OperatorGroup class when defining a custom Strategy.
+For the details of Operator-compatibility, please see Operator. Some interfaces could also be
+compatible with SeriesOperatorGroup, which enables the ability to cascade the processing in series.
+
+Interfaces are also categorized into individual level (Genome, Organism) and pool level
+(GenomePool, OrganismPool).
+There are also some considerable classes which aren't interfaces but have great impact on the system.
+They are also listed in the table.
+
+<table>
+	<tr>
+		<th>Class</th>
+		<th>Parent</th>
+		<th>Compability</th>
+		<th>Level</th>
+		<th>Input type</th>
+		<th>Output type</th>
+		<th>Description</th>
+	</tr>
+	<tr><td colspan="7" class="table-separator">Variation operators</td></tr>
+	<tr>
+		<td>Variator</td>
+		<td></td>
+		<td>SeriesOperatorGroup</td>
+		<td>%Pool</td>
+		<td>GenomePool</td>
+		<td>GenomePool</td>
+		<td>Interface for Variation operators.</td>
+	</tr>
+	<tr>
+		<td>Recombinator</td>
+		<td>Variator</td>
+		<td>SeriesOperatorGroup via Variator</td>
+		<td>Individual</td>
+		<td>vector<Genome></td>
+		<td>Genome</td>
+		<td>Interface for Recombination operators.
+		It and its child classes support multi-threading.</td>
+	</tr>
+	<tr>
+		<td>Mutator</td>
+		<td>Recombinator</td>
+		<td>SeriesOperatorGroup via Variator</td>
+		<td>Individual</td>
+		<td>Genome</td>
+		<td>Genome</td>
+		<td>Interface for Mutation operators.</td>
+	</tr>
+	<tr>
+		<td>TypedRecombinator</td>
+		<td>Recombinator</td>
+		<td>SeriesOperatorGroup via Variator</td>
+		<td>Individual</td>
+		<td>vector<Typed Genome></td>
+		<td>Typed Genome</td>
+		<td>Interface for Recombination operators with known Genome type.</td>
+	</tr>
+	<tr>
+		<td>TypedMutator</td>
+		<td>Mutator</td>
+		<td>SeriesOperatorGroup via Variator</td>
+		<td>Individual</td>
+		<td>Typed Genome</td>
+		<td>Typed Genome</td>
+		<td>Interface for Mutation operators with known Genome type.</td>
+	</tr>
+	<tr>
+		<td>Initializer</td>
+		<td>Recombinator</td>
+		<td>Operator</td>
+		<td>%Pool</td>
+		<td>uint</td>
+		<td>GenomePool</td>
+		<td>Interface for initializer method. The uint is used to specify the output pool size.
+		It can be used as a Recombinator with 0 parents, but not a Variator.</td>
+	</tr>
+	<tr>
+		<td>MetaRecombinator</td>
+		<td></td>
+		<td>Operator</td>
+		<td>%Pool</td>
+		<td>OrganismPool</td>
+		<td>GenomePool</td>
+		<td>Class combining Recombinator with parent Selector. EAML name registered.</td>
+	</tr>
+	<tr>
+		<td>MetaMutator</td>
+		<td>Variator</td>
+		<td>SeriesOperatorGroup via Variator</td>
+		<td>%Pool</td>
+		<td>GenomePool</td>
+		<td>GenomePool</td>
+		<td>Class combining Mutator with mutation rate. EAML name registered.</td>
+	</tr>
+	<tr><td colspan="7" class="table-separator">Selection operators</td></tr>
+	<tr>
+		<td>Selector</td>
+		<td></td>
+		<td>SeriesOperatorGroup</td>
+		<td>%Pool</td>
+		<td>OrganismPool</td>
+		<td>OrganismPool</td>
+		<td>Interface for Selection operators.</td>
+	</tr>
+	<tr>
+		<td>ResizableSelector</td>
+		<td>Selector</td>
+		<td>SeriesOperatorGroup via Selector</td>
+		<td>%Pool</td>
+		<td>OrganismPool</td>
+		<td>OrganismPool</td>
+		<td>Interface for Selection operators with adjustable output pool size.</td>
+	</tr>
+	<tr><td colspan="7" class="table-separator">Evaluation operators</td></tr>
+	<tr>
+		<td>Evaluator</td>
+		<td></td>
+		<td>Operator</td>
+		<td>%Pool</td>
+		<td>GenomePool</td>
+		<td>OrganismPool</td>
+		<td>Interface for Evaluation method.</td>
+	</tr>
+	<tr>
+		<td>IndividualEvaluator</td>
+		<td>Evaluator</td>
+		<td>Operator via Evaluator</td>
+		<td>Individual</td>
+		<td>Genome</td>
+		<td>Fitness</td>
+		<td>Interface for Evaluation method on individual level.
+		It and its child classes support multi-threading and cluster computation.</td>
+	</tr>
+	<tr>
+		<td>ScalarEvaluator</td>
+		<td>IndividualEvaluator</td>
+		<td>Operator via Evaluator</td>
+		<td>Individual</td>
+		<td>Genome</td>
+		<td>double</td>
+		<td>Interface for Evaluation method which outputs only a single fitness number.</td>
+	</tr>
+	<tr>
+		<td>TypedScalarEvaluator</td>
+		<td>ScalarEvaluator</td>
+		<td>Operator via Evaluator</td>
+		<td>Individual</td>
+		<td>Typed Genome</td>
+		<td>double</td>
+		<td>ScalarEvaluator with known Genome type.</td>
+	</tr>
+	<tr>
+		<td>FunctionalEvaluator</td>
+		<td>ScalarEvaluator</td>
+		<td>Operator via Evaluator</td>
+		<td>Individual</td>
+		<td>Genome</td>
+		<td>double</td>
+		<td>ScalarEvaluator which use a function object as evaluation function.</td>
+	</tr>
+	<tr>
+		<td>TypedFunctionalEvaluator</td>
+		<td>FunctionalEvaluator</td>
+		<td>Operator via Evaluator</td>
+		<td>Individual</td>
+		<td>Typed Genome</td>
+		<td>double</td>
+		<td>FunctionalEvaluator with known Genome type.</td>
+	</tr>
+	<tr><td colspan="7" class="table-separator">Others</td></tr>
+	<tr>
+		<td>Hook</td>
+		<td></td>
+		<td>Operator</td>
+		<td></td>
+		<td>@tt{void}</td>
+		<td>@tt{void}</td>
+		<td>Interface for custom code.</td>
+	</tr>
+</table>
+
+@section op_variator Variation operators
+This part lists all Recombinator, Mutator and Initializer which work on a specific type of Genome.
+<table>
+	<tr>
+		<th>%Genome representation</th>
+		<th>Variation type</th>
+		<th>Variation operators</th>
+		<th>EAML name</th>
+	</tr>
+	<tr>
+		<td rowspan="4">ArrayGenome</td>
+		<td>Initializer</td>
+		<td>RandomArrayInitializer</td>
+		<td>
+			<code>%BoolRandomArrayInitializer</code><br>
+			<code>%IntRandomArrayInitializer</code><br>
+			<code>%DoubleRandomArrayInitializer</code>
+		</td>
+	</tr>
+	<tr>
+		<td>Mutator</td>
+		<td>PointResetMutation</td>
+		<td>
+			<code>%FlipBitMutation</code><br>
+			<code>%IntPointResetMutation</code><br>
+			<code>%DoublePointResetMutation</code>
+		</td>
+	</tr>
+	<tr>
+		<td rowspan="2">Recombinator<br>with 2 parents</td>
+		<td>@ref NPointCrossover<T></td>
+		<td>
+			<code>%BoolNPointCrossover</code><br>
+			<code>%IntNPointCrossover</code><br>
+			<code>%DoubleNPointCrossover</code>
+		</td>
+	</tr>
+	<tr>
+		<td>@ref NPointCrossover<T, N></td>
+		<td><code>%BoolOnePointCrossover</code><br>
+			<code>%IntOnePointCrossover</code><br>
+			<code>%DoubleOnePointCrossover</code><br>
+			<code>%BoolTwoPointCrossover</code><br>
+			<code>%IntTwoPointCrossover</code><br>
+			<code>%DoubleTwoPointCrossover</code></td>
+	</tr>
+
+	<tr>
+		<td rowspan="9">PermutationGenome</td>
+		<td>Initializer</td>
+		<td>PermutationInitializer</td>
+		<td><code>%PermutationInitializer</code></td>
+	</tr>
+	<tr>
+		<td rowspan="4">Mutator</td>
+		<td>InsertMutation</td>
+		<td><code>%InsertMutation</code></td>
+	</tr>
+	<tr>
+		<td>InversionMutation</td>
+		<td><code>%InversionMutation</code></td>
+	</tr>
+	<tr>
+		<td>ScrambleMutation</td>
+		<td><code>%ScrambleMutation</code></td>
+	</tr>
+	<tr>
+		<td>SwapMutation</td>
+		<td><code>%SwapMutation</code></td>
+	</tr>
+	<tr>
+		<td rowspan="4">Recombinator<br>with 2 parents</td>
+		<td>CycleCrossover</td>
+		<td><code>%CycleCrossover</code></td>
+	</tr>
+	<tr>
+		<td>EdgeCrossover</td>
+		<td><code>%EdgeCrossover</code></td>
+	</tr>
+	<tr>
+		<td>OrderCrossover</td>
+		<td><code>%OrderCrossover</code></td>
+	</tr>
+	<tr>
+		<td>PartiallyMappedCrossover</td>
+		<td><code>%PartiallyMappedCrossover</code></td>
+	</tr>
+</table>
+
+@section op_selector Selection operators
+This part lists all Selector available in the library. Selector works on Organism level
+and therefore, doesn't depend on type of Genome.
+<table>
+	<tr>
+		<th>Selection operators</th>
+		<th>EAML name</th>
+	</tr>
+	<tr>
+		<td>GreedySelection</td>
+		<td><code>%GreedySelection</code></td>
+	</tr>
+	<tr>
+		<td>TournamentSelection</td>
+		<td><code>%TournamentSelection</code></td>
+	</tr>
+	<tr>
+		<td>UniformSelection</td>
+		<td><code>%UniformSelection</code></td>
+	</tr>
+</table>
+
+@section op_hook Hooks
+This part lists all Hook available in the library. Some Hook depends on some conditions or some specific Strategy.
+<table>
+	<tr>
+		<th>Hook operators</th>
+		<th>EAML name</th>
+		<th>Condition</th>
+	</tr>
+	<tr>
+		<td>StandardOutputHook</td>
+		<td><code>%StandardOutputHook</code></td>
+		<td>Pool #0 must be OrganismPool and Fitness type must be ScalarFitness</td>
+	</tr>
+	<tr>
+		<td>BackupHook</td>
+		<td><code>%BackupHook</code></td>
+		<td>Stored Pool, Genome and Fitness type must define a EAML name</td>
+	</tr>
+	<tr>
+		<td>FitnessTerminationHook</td>
+		<td><code>%FitnessTerminationHook</code></td>
+		<td>Pool #0 must be OrganismPool and Fitness type must be ScalarFitness</td>
+	</tr>
+	<tr>
+		<td>GenerationTerminationHook</td>
+		<td><code>%GenerationTerminationHook</code></td>
+		<td>No condition</td>
+	</tr>
+	<tr>
+		<td>EvaluationTerminationHook</td>
+		<td><code>%EvaluationTerminationHook</code></td>
+		<td>No condition</td>
+	</tr>
+	<tr>
+		<td>RealTimeInfoHook</td>
+		<td><code>%RealTimeInfoHook</code></td>
+		<td>Pool #0 must be OrganismPool and Fitness type must be ScalarFitness</td>
+	</tr>
+	<tr>
+		<td>FitnessReportHook</td>
+		<td><code>%FitnessReportHook</code></td>
+		<td>Pool #0 must be OrganismPool and Fitness type must be ScalarFitness</td>
+	</tr>
+	<tr>
+		<td>CMAStateOutputHook</td>
+		<td><code>%CMAStateOutputHook</code></td>
+		<td>Must use with CMAEvolutionStrategy</td>
+	</tr>
+</table>
+
+ */
+
+}

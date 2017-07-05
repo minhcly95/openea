@@ -1,0 +1,35 @@
+#!/usr/bin/make
+
+CPPFLAGS := -std=c++14 -O3 -g0 -Wall -c -fmessage-length=0 -fPIC
+
+CPP_ADDON := $(shell find addon -name "*.cpp")
+OBJS_ADDON := $(CPP_ADDON:addon/%.cpp=addon-obj/%.o)
+
+SUB_DIRS := $(shell find addon/ -type d)
+SUB_DIRS := $(SUB_DIRS:addon/%=addon-obj/%)
+
+# All Target
+all: libopenea_addon.so
+
+# Sub directory
+$(SUB_DIRS):
+	@echo 'Creating directory: $@'
+	@-mkdir $(@)
+
+# Compiler
+$(OBJS_ADDON): addon-obj/%.o: addon/%.cpp
+	@echo 'GCC C++ Compiler: $<'
+	@g++ $(CPPFLAGS) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+
+addon-obj/Add-on.o: Add-on.cpp
+	@echo 'GCC C++ Compiler: $<'
+	@g++ $(CPPFLAGS) -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+
+# Linker
+libopenea_addon.so: $(SUB_DIRS) $(OBJS_ADDON) addon-obj/Add-on.o
+	@echo 'GCC C++ Linker: $@'
+	@g++ -shared -o "$@" $(OBJS_ADDON) addon-obj/Add-on.o -lopenea
+
+# Other Targets
+clean:
+	-rm -rf $(SUB_DIRS) libopenea_addon.so

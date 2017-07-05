@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<EvolutionStrategy size="100|size">
+	
+	<initializer>
+		<BoolRandomArrayInitializer length="100"/>
+	</initializer>
+	
+	<evaluator>
+		<SampleOneMaxEvaluator/>
+	</evaluator>
+	
+	<recombinators>
+		<MetaRecombinator ratio="1">
+			<recombinator>
+				<BoolOnePointCrossover/>
+			</recombinator>
+			<selector>
+				<UniformSelection with-replacement="true"/>
+			</selector>
+		</MetaRecombinator>
+	</recombinators>
+	
+	<mutators>
+		<MetaMutator rate="0.1">
+			<mutator>
+				<FlipBitMutation rate="0.01">
+					<randomizer>
+						<BoolRandomizer/>
+					</randomizer>
+				</FlipBitMutation>
+			</mutator>
+		</MetaMutator>
+	</mutators>
+	
+	<survival-selector>
+		<GreedySelection/>
+	</survival-selector>
+	
+	<hooks>
+		<!--<StandardOutputHook/>
+		<FitnessTerminationHook condition="ge" threshold="100"/>-->
+		<GenerationTerminationHook target="100000|target"/>
+	</hooks>
+	
+</EvolutionStrategy>

@@ -1,0 +1,294 @@
+namespace ea {
+
+/**
+
+@page tut5 Bundle custom operators into a Plugin
+This page describes the process how to create a plugin for the CLI from custom operators.
+
+@par Tutorial level
+Intermediate
+
+@par Previous tutorial
+@ref tut4
+
+@par Next tutorial
+@ref tut6
+
+@tableofcontents
+
+@section tut5-plugins Plugins
+As mentioned in @ref tut2 "Tutorial 2", you can extent the framework by adding classes as add-ons so you can use
+them in the CLI. But the "add-on solution" can't help you if your classes depend on other libraries.
+And sometimes, your classes need special compiler options, or must be compiled with other toolset.
+Thankfully, plugins come to save the day. Plugins allow you to compile your files by yourself. In the end, you must provide
+a shared library and reconfigure the CLI so it can find and load your custom classes.
+Here, I describe the steps you need to do in order to create a plugin:
+-# First, of course, you need to write your custom classes (which has been done in @ref tut4 "Tutorial 4").
+-# Then, use macros to register your classes into the NameService automatically.
+-# Next, write a special source file to aggregate all the classes needed to be added to the NameService.
+-# Compile your classes to produce a shared library.
+-# Finally, reconfigure the CLI so it can find and load your newly created shared library.
+
+@section tut5-rewriting Rewriting custom classes
+First thing we need to do is to split the code in @ref tut4 "Tutorial 4" into multiple files.
+You can find the full source listing here:
+
+- @ref SphereOptVector.h
+- @ref SphereOptVector.cpp
+- @ref SphereMutation.h
+- @ref SphereMutation.cpp
+- @ref SphereCrossover.h
+- @ref SphereCrossover.cpp
+- @ref SphereInitializer.h
+- @ref SphereInitializer.cpp
+- @ref SphereOptEvaluator.h
+- @ref SphereOptEvaluator.cpp
+- @ref SphereOptPlugin.cpp
+
+
+@note
+The line @tt{\#ifndef DOXYGEN_IGNORE} and @tt{\#endif} are used to ignore these classes in documentation generating process.
+You can omit them in your implementation.
+
+@subsection tut5-norm Normalization
+First, we will transform the normalization function into a static function of a class named @tt{SphereOptVector}.
+This step is not very neccessary, you can use old-style C global function instead of static function, but
+I just want to make it consistent. Here is the function declaration part in @ref SphereOptVector.h :
+
+@snippet listing/SphereOptVector.h Declaration
+
+@note
+In this tutorial, I will only show the class declaration part of the header files. The implementation of those classes in the source file is
+nearly identical to which in @ref tut4 "Tutorial 4". You can consult the source listing given above for the specific implementation.
+
+@subsection tut5-var Mutator and Recombinator
+Next, we will split the @tt{SphereMutation} and @tt{SphereCrossover} class into their own header and source files:
+
+@snippet listing/SphereMutation.h Declaration
+
+@snippet listing/SphereCrossover.h Declaration
+
+Besides defining the classes, we also add two macros mentioned in @ref tut2 "Tutorial 2". Here is a little recap:
+
+> The first macro is @ref EA_TYPEINFO_DEFAULT which define the type information (TypeInfo) of your custom type.
+> This TypeInfo contains the EAML Name, the attributes of your class and how to construct it from an EAML configuration file.
+> The second macro is @ref REGISTER_ADDON which will add the defined-above TypeInfo to the NameService.
+> If your class is not added to the NameService by using this macro,
+> the CLI has no way to know what is the EAML name of your custom class.
+
+You also notice, in @ref SphereOptVector.h we don't have such macro. The reason is simple: you only need to use these macros
+for classes which are built from an EAML file. If a class is used internally only, you don't need to define anything.
+
+@subsection tut5-init Initializer
+The class @tt{SphereInitializer} needs some attention. If we look into its declaration:
+
+@snippet listing/SphereInitializer.h Declaration
+
+We will notice that its contructor requires a parameter (the initial pool size). We cannot construct a @tt{SphereInitializer}
+without this parameter. @ref EA_TYPEINFO_DEFAULT isn't suitable for this class, because it construct the class using the
+default constructor. Therefore we must define a custom TypeInfo by first use the macro @ref EA_TYPEINFO_CUSTOM_DECL to declare that
+we will write a custom one. Then in the source file (@ref SphereInitializer.cpp), we have this segment of code:
+
+@snippet listing/SphereInitializer.cpp TypeInfo
+
+The first line using the macro
+
+@dontinclude listing/SphereInitializer.cpp
+@skipline EA_TYPEINFO
+
+to start implement the TypeInfo. If you have declared a TypeInfo using @ref EA_TYPEINFO_CUSTOM_DECL,
+you must have a @ref EA_TYPEINFO_CUSTOM_IMPL of the same class somewhere in your code.
+Then, we define the EAML Name of the class using TypeInfo constructor:
+
+@skipline TypeInfo
+
+@note
+Defining custom TypeInfo allows you to give a different EAML Name to a class by changing the string in the TypeInfo constructor.
+You can not do this when using @ref EA_TYPEINFO_DEFAULT.
+
+Finally, assign the signature of the constructor that you want to use:
+
+@skipline SetConstructor
+
+In this example, it will use the constructor of class @tt{SphereInitializer} with a parameter of type @tt{uint}. This parameter has
+an EAML attribute name of @tt{"length"}. You can only set only one signature for the constructor. Every attribute name existing in this signature
+is required.
+
+@note
+See @ref tut5-optional to know how to make the attribute @tt{"length"} optional.
+
+@subsection tut5-eval Evaluator
+Before we can package our classes into a plugin, we still need to write an Evaluator for our problem.
+The process of writing an Evaluator is identical to which described in @ref tut2 "Tutorial 2".
+Here is the code of the Evaluator:
+
+@ref SphereOptEvaluator.h
+
+@snippet listing/SphereOptEvaluator.h Declaration
+
+@ref SphereOptEvaluator.cpp
+
+@snippet listing/SphereOptEvaluator.cpp Definition
+
+@subsection tut5-plugin Plugin
+To create a plugin, it is required to have another source file to aggregate all the classes needed to be registered in the NameService.
+
+@ref SphereOptPlugin.cpp
+
+@include listing/SphereOptPlugin.cpp
+
+The source file must define @cmd{EA_PLUGIN_MAIN_SOURCE} and include the @tt{<openea/EA/Plugin.h>} header file.
+Besides that, it must also include all the header files containing @ref REGISTER_ADDON macro (directly or indirectly).
+Notice the order of these preprocessors, it is important. The macro definition must come first, then the @tt{Plugin.h} header, then
+other header files. At this point, we are ready to compile our plugin.
+
+@note
+You may notice that SphereOptVector.h is not included because @tt{SphereOptVector} doesn't need to be registered to the NameService.
+
+@section tut5-compile Compile and Configure
+You can compile a plugin just like any shared library. Remember to link to the @tt{openea} library.
+Here I create a @tt{Makefile} to make things more organized:
+
+@include Tutorials/SphereOpt/makefile
+
+@note
+It is not required to have the library name with the prefix of @tt{libopenea}. This file name is just for demonstration purpose.
+
+Then invoke this @tt{Makefile} to compile our plugin by using this command:
+
+@code
+make all
+@endcode
+
+A file @cmd{libopenea_SO.so} will be generated. The next step is to configure the CLI so it can find your newly compiled library.
+First you need to know the absolute path of your library. You could enter this command to print out the path:
+
+@code
+realpath libopenea_SO.so
+@endcode
+
+Then, you need to copy this path into the @cmd{plugin.conf} file. If you don't know where this file resides in your system,
+use this command to edit the file directly in your favorite editor:
+
+@code
+openea edit plugin
+@endcode
+
+Paste the path of your library there, save it and done, you have finished the reconfiguration procedure. You don't need to recompile
+anything, your library will be loaded dynamically when an EA starts (that's the power of this framework, compilation is kept to a minimum).
+
+@note
+You can have multiple plugins configured by having multiple lines in the @tt{plugin.conf} file, each line for a plugin.
+
+@section tut5-run Run an EAML
+Before we end this tutorial, we need to make sure that our plugin works. First, create an EAML file (named @tt{SphereOpt.eaml} in this case):
+
+@include Tutorials/SphereOpt/SphereOpt.eaml
+
+Then run it using the CLI toolset:
+
+@code
+openea run SphereOpt.eaml
+@endcode
+
+And it should produce an output like this:
+
+@code
+[2017-06-28 14:13:15.628281] PluginLoader: Loaded 1 plugin(s).
+[2017-06-28 14:13:15.628332] CLI: Reading SphereOpt.eaml
+[2017-06-28 14:13:15.628636] CLI: "EvolutionStrategy" reconstructed
+[2017-06-28 14:13:15.628683] CLI: BackupHook not found. Default one added to folder "~/.openea/.backup".
+[2017-06-28 14:13:15.634487] Parallel processing is enabled, number of threads = 4
+[2017-06-28 14:13:15.646656] BackupHook::DoInitial: Cleared 1 file(s) in "~/.openea/.backup".
+[2017-06-28 14:13:15.646695] Population initialized, evaluation 100
+[2017-06-28 14:13:15.646717] Evolution started from generation 0, evaluation 100
+Gen       1	Best =   0.100655	0.1148-0.1045-0.2212-0.1954-0.1574-0.1842-0.0792-0.2021-0.2264- ...
+Gen       2	Best =   0.302582	0.2032-0.2280-0.2346-0.1565-0.1303-0.1177-0.2196-0.2020-0.1301- ...
+Gen       3	Best =   0.453406	0.2286-0.2101-0.1743-0.1655-0.2069-0.2666-0.1505-0.2261-0.2603- ...
+...
+Gen   9,998	Best =   0.999993	0.1998-0.2001-0.1998-0.1999-0.2002-0.2000-0.2001-0.2000-0.2001- ...
+Gen   9,999	Best =   0.999993	0.1998-0.2001-0.1998-0.1999-0.2002-0.2000-0.2001-0.2000-0.2001- ...
+Gen  10,000	Best =   0.999993	0.1998-0.2001-0.1998-0.1999-0.2002-0.2000-0.2001-0.2000-0.2001- ...
+[2017-06-28 14:13:22.041399] GenerationTerminationHook: Reached generation #10000 >= 10000. Terminating...
+[2017-06-28 14:13:22.041870] BackupHook: Backup saved to "~/.openea/.backup/010000.eabak".
+[2017-06-28 14:13:22.041905] Evolution stopped at generation 10000, evaluation 1000100
+[2017-06-28 14:13:22.041927] Time Report: [S] 0.138166 [M] 0.0820524 [E] 0.115055 [F] 0.0919763 [Total] 0.486242 ms
+@endcode
+
+You should notice now, in the first output line, we have now 1 plugin loaded.
+If you have an error like this:
+
+@code
+PluginLoader: Loaded 0 plugin(s).
+...
+Fatal Error: ../src/rtoc/NameService.cpp:41 : CLASS_NAME_NOT_EXIST - SphereInitializer class does not exist in Name service.
+@endcode
+
+Please make sure the path of your library is correct and the library exists.
+
+@section tut5-conclution Conclusion
+This tutorial has shown you how to package your custom classes into a plugin for CLI toolset.
+With your plugin up and running, you can use any CLI options mentioned in @ref tut3 "Tutorial 3"
+to add more features and control your algorithm.
+Here is the summary of the process of creating a plugin:
+
+- Write your custom classes.
+- Use macros to define TypeInfo and register it to the NameService. Define custom TypeInfo if needed.
+- Write a source file aggregates all the classes needed to be added to the NameService.
+- Compile the plugin in the form of a shared library.
+- Configure the CLI by copy the path of the library into @tt{plugin.conf}.
+
+The next tutorial will introduce a new CLI feature which is distributed computation on cluster:
+
+@ref tut6
+
+@section tut5-optional Appendix: Optional attributes
+
+In this tutorial, the class @tt{SphereInitializer} has a required attribute named @tt{"length"}.
+If you want to make this attribute optional, you need some little adjustments of the code.
+First, the class constructor must have a signature excluding the optional attribute.
+For example, we can edit the SphereInitializer.h as follow:
+
+@code
+class SphereInitializer: public Initializer {
+public:
+	EA_TYPEINFO_CUSTOM_DECL
+
+	SphereInitializer(uint pLength = 25);
+
+protected:
+	virtual GenomePoolPtr DoInitialize(uint pSize) override;
+
+private:
+	uint mLength;
+};
+
+REGISTER_ADDON(SphereInitializer)
+@endcode
+
+Now, the class has two signatures for the constructor, one of them requires no parameter.
+Then, edit the TypeInfo definition as follow:
+
+@code
+EA_TYPEINFO_CUSTOM_IMPL(SphereInitializer) {
+	return *ea::TypeInfo("SphereInitializer").
+			Add("length", &SphereInitializer::mLength)->
+			SetConstructor<SphereInitializer>();
+}
+@endcode
+
+There are two modifications. First in @tt{SetConstructor()}, we removed the parameter, so it will construct the object
+using the contructor with no parameter and @tt{"length"} is not required. Then, we need to add the @tt{"length"} attribute
+separately using @tt{TypeInfo::Add()}. In this case, we bind the @tt{"length"} attribute to the field @tt{SphereInitializer::mLength}
+using member pointer. You don't need to understand what member pointer is, just use this pattern where you need.
+
+To test our modification, recompile the plugin, remove the @tt{"length"} attribute of @eamltag{SphereInitializer} tag in the EAML file
+and the program should run like normal.
+
+@note
+Only the first line of TypeInfo definition uses dot, from the second line, an arrow is used instead. The reason is that the TypeInfo::Add()
+returns a pointer of TypeInfo for cascaded calls while calling its constructor creates a value object.
+
+ */
+
+}

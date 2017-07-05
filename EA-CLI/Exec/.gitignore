@@ -1,0 +1,8 @@
+/add-on/
+/src/
+/openea-run
+/.backup/
+/libopenea_addon.so
+/plugin-remote.conf
+/cluster.conf
+/plugin.conf

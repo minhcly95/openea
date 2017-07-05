@@ -1,0 +1,11 @@
+openea (0.3.1-1~ubuntu16.04) xenial; urgency=medium
+
+  * Fixed small bug in Randomizer (Closes: #0)
+
+ -- Bui Quang Minh <minhcly95@outlook.com>  Wed, 05 Jul 2017 14:52:45 +0200
+
+openea (0.3.0-1~ubuntu16.04) xenial; urgency=medium
+
+  * Alpha release (Closes: #0)
+
+ -- Bui Quang Minh <minhcly95@outlook.com>  Wed, 5 Jul 2017 13:49:03 +0200

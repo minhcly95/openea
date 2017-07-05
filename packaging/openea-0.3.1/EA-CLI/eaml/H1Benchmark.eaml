@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<CMAEvolutionStrategy dimension="2" step-size="30|step" lambda="100|lambda" mu="100|mu" >
+
+	<evaluator>
+		<H1BenchmarkEvaluator/>
+	</evaluator>
+	
+	<hooks>
+		<CMAStateOutputHook/>
+		<FitnessTerminationHook condition=">=" threshold="1.9999999"/>
+		<EvaluationTerminationHook target="1000000|target"/>
+	</hooks>
+	
+</CMAEvolutionStrategy>

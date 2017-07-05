@@ -1,0 +1,325 @@
+namespace ea {
+
+/**
+
+@page tut4 Write custom operators using the API
+This page describes the process of implementing custom operators.
+
+@par Tutorial level
+Intermediate
+
+@par Previous tutorial
+@ref tut3
+
+@par Next tutorial
+@ref tut5
+
+@tableofcontents
+
+@section tut4-problem Sphere Optimization problem
+This problem is took from page 249 of the book **How to Solve It: Modern Heuristics**, 2004, by *Z. Michalewicz* and *D.B. Fogel*.
+The problem has no name, so I named it the Sphere Optimization problem (SO). The problem can be described as follow:
+
+@par Sphere Optimization problem
+Find a vector of real numbers \f${\bf x}=\{x_1,x_2,...,x_n\}\f$ which maximizes:
+
+\f[
+SO({\bf x}) = (\sqrt{n})^n \prod_{i=1}^n x_i
+\f]
+
+@par
+where \f$\sum_{i=1}^n x_i^2 = 1\f$ and \f$0 \leq x_i \leq 1\f$ for \f$1 \leq i \leq n\f$.
+
+The global solution is at \f$(x_1,...,x_n) = (\frac{1}{\sqrt{n}},...,\frac{1}{\sqrt{n}})\f$ and
+the optimal value is \f$SO({\bf x}) = 1\f$. What makes the problem interesting is the hard constraint
+forces us to search on a hyper-sphere manifold, so we must design specialized mutation, recombination and
+also initialization operators in order to find a feasible solution (not violating the constraint).
+Therefore this is a very good example for us to write some custom operators.
+
+@section tut4-desc Algorithm Description
+Before jumping in the implemetation, we should again discuss and write out our algorithm description.
+The difficulty of this problem is that in order to maintain its feasibility,
+we can't adjust any component of \f$\bf x\f$ without changing others. Therefore, we must write custom
+operators to initialize a feasible population in the first place and maintain that feasibility via specialized
+mutation and recombination methods.
+
+To initialize a feasible solution, first, we just need to randomize a vector \f${\bf y}=\{y_1,y_2,...,y_n\}\f$
+normally, then calculate its L2-norm \f$||{\bf y}||=\sqrt{\sum_{i=1}^n y_i^2}\f$ and assign
+\f${\bf x} = \frac{\bf y}{||{\bf y}||}\f$.
+
+@note
+This random initialization method is not uniform. However, the work spent on designing
+a totally fair initialization method might even greater than the work needed to solve the problem.
+Anyway, we are using a heuristic method to solve the problem,
+so don't be so obsessed with a perfect solution for everything.
+
+Mutation can be done by multiplying a random component \f$x_i\f$ with \f$p\f$ in \f$[0, 1]\f$ and
+another \f$x_j\f$ with \f$q = \sqrt{(x_i/x_j)^2(1-p^2) + 1}\f$, so we will have:
+
+\f{eqnarray*}{
+x'^2_i + x'^2_j &=& (p\cdot x_i)^2 + (q\cdot x_j)^2\\
+&=& p^2x_i^2 + ((x_i/x_j)^2(1-p^2) + 1)x_j^2\\
+&=& p^2x_i^2 + x_i^2(1-p^2) + x_j^2\\
+&=& x^2_i + x^2_j
+\f}
+
+So the constraint won't be violated because the sum of squares before and after mutation is the same.
+
+The specialized recombination operator will be used in this tutorial is called *sphere crossover*. It takes two vectors
+\f${\bf x}\f$ and \f${\bf y}\f$ as parents and spawns an offspring \f${\bf z}\f$ whose component value is calculated
+by \f$z_i = \sqrt{\alpha x^2_i + (1 - \alpha)y^2_i}\f$ with \f$i \in [1, n]\f$ and \f$\alpha\f$ randomly chosen in \f$[0, 1]\f$.
+If we examine the feasibility of \f${\bf z}\f$:
+
+\f{eqnarray*}{
+\sum_{i=1}^n z_i^2 &=& \sum_{i=1}^n \left( \alpha x^2_i + (1 - \alpha)y^2_i \right)\\
+&=& \alpha \sum_{i=1}^n x^2_i + (1 - \alpha) \sum_{i=1}^n y^2_i\\
+&=& \alpha + (1 - \alpha) = 1
+\f}
+
+and hence \f${\bf z}\f$ doesn't violate the constraint.
+
+@note
+The result of mutation and the recombination is only valid if the input vectors are feasible.
+But because we initialize the population with only feasible solutions,
+and our mutation and recombination operators generate feasible output from feasible inputs,
+so our population will be always feasible (it is similar to proof by induction).
+This constraint handling technique is called **preservation of feasibility by specialized operators**.
+There are many other techniques to handle constraints, but we are trying to write some custom operators
+so we will stick with this technique.
+
+With our custom operators, we can then design our algorithm as in the following description:
+
+<table>
+<tr>
+	<td>Representation</td>
+	<td>An array of double of length *n*</td>
+</tr>
+<tr>
+	<td>%Evaluation function</td>
+	<td>The function \f$SO({\bf x})\f$</td>
+</tr>
+<tr>
+	<td>Recombination</td>
+	<td>Sphere crossover (described above)</td>
+</tr>
+<tr>
+	<td>Offspring ratio</td>
+	<td>100%</td>
+</tr>
+<tr>
+	<td>Mutation</td>
+	<td>Sphere mutation (described above)</td>
+</tr>
+<tr>
+	<td>Mutation probability</td>
+	<td>10%</td>
+</tr>
+<tr>
+	<td>Parent selection</td>
+	<td>Uniform (random)</td>
+</tr>
+<tr>
+	<td>Survival selection</td>
+	<td>Tournament with size 5</td>
+</tr>
+<tr>
+	<td>%Population size</td>
+	<td>100</td>
+</tr>
+<tr>
+	<td>Initialization</td>
+	<td>Sphere initialization (described above)</td>
+</tr>
+<tr>
+	<td>Terminal condition</td>
+	<td>After 10000 generations</td>
+</tr>
+</table>
+
+In the following implementation, we will assign the default length of the vector *n* = 25.
+
+@section tut4-opertors Implementation
+In this tutorial, we will implement this algorithm by using the C++ API. In the next tutorial, we will
+use CLI to launch our program instead. I recommend you to implement a working algorithm using C++ API first,
+then convert it to plugin for CLI later.
+
+Here I won't show the full code. You can find the full source listing here:
+
+@ref SphereOpt.cpp 
+
+@subsection tut4-norm Normalization
+Before we implement those operators described above, you must understand that in C++, double type
+has finite precision, therefore result of calculations might be round up or down. This effect won't hurt
+if you only do the calculation once. But in our algorithm, these errors will be added up generation by generation,
+and eventually, the constraint will be violated (at a recognizable scale).
+The solution for this is when a vector is modified, it must come with a normalization,
+similar to the process we used for the sphere initialization method, and the errors won't have chance to add up.
+Here, I created a function named @tt{Normalize()} to keep our vectors valid:
+
+@snippet listing/SphereOpt.cpp Normalization
+
+We can start writing our operators now.
+
+@subsection tut4-init Initialization
+The normalization process above also implements a part of the initialization. What is left to do
+is to generate a random vector. Initialization method must derive from Initializer interface.
+There is no type-casting helper for Initializer now, so you need to convert between types by yourself.
+Here is the implementation:
+
+@snippet listing/SphereOpt.cpp Initialization
+
+The interface gives you a integer for the expected size and what you need to do is to return a pointer of a vector
+of @ref GenomePtr with the given size. These @ref GenomePtr must be **independent**, that means they **can not**
+share a same reference of Genome.
+
+In the API, we mostly work with smart pointers. Smart pointers must be created by the function std::make_shared()
+as opposed to the @cmd{new} keyword of normal pointer. However, you don't need to @cmd{delete} a smart pointer,
+it is automatically deleted if there is no reference to the object anymore (that's why it is called "smart").
+You can not cast smart pointer in the old fashion also (std::static_cast() and std::dynamic_cast()), you must use
+smart pointer casting functions such as std::static_pointer_cast() and std::dynamic_pointer_cast().
+For example, you can create the @ref VectorPtr to return as the result of the function by using:
+
+@dontinclude listing/SphereOpt.cpp
+@skipline make_shared<GenomePool>()
+
+Then create a @ref DoubleArrayGenomePtr by: 
+@skipline make_shared<DoubleArrayGenome>()
+
+The vector can only contain @ref GenomePtr so at the end, you must cast back by using:
+@skipline static_pointer_cast<Genome>(newGenome)
+
+When working with @ref DoubleArrayGenome, we must access its content via a reference of std::vector:
+@dontinclude listing/SphereOpt.cpp
+@skipline x = newGenome->GetGenes();
+
+Remember to always use reference to access the content of the ArrayGenome. If you use normal type,
+the information will be copied and you cannot actually set values to the real content.
+We need to fill the content with random numbers.
+The library provides the static function Random::Rate() to generate a random double number from 0 to 1 (exclusive).
+@skip for
+@until Random::Rate()
+
+After having the vector filled, we will use the normalization function created in the previous step to make our vector valid:
+@skipline Normalize(x)
+
+@subsection tut4-mutation Mutation
+We will then write our Mutator next. Mutation operator inherits from Mutator,
+but in this case, we knew that we want to use @ref DoubleArrayGenome,
+therefore our operator should derive from TypedMutator instead so we don't need to handle type-casting.
+Here is the implementation:
+
+@snippet listing/SphereOpt.cpp Mutation
+
+The interface requires a @ref DoubleArrayGenomePtr as input and another @ref DoubleArrayGenomePtr as output.
+These two pointers must point to **different objects**, therefore we need to **clone** our genome before
+applying any modification:
+
+@skipline Clone
+
+The next random function you should know is Random::Pair() which will generate a pair of integer numbers.
+These two numbers are guaranteed to be different.
+
+@skipline Random::Pair
+@skipline uint i
+
+The calculation is straight-forward. Notice that at the end, we normalize the vector again:
+
+@skipline Normalize
+
+@note
+You may think, if we normalize the output eventually to make it feasible, why would we need to
+design the operators to preverse the feasibility. The answer is, the normalization is only
+an implementation feature in practice.
+What we want is an effective search, not a completely blind search, and searching on the the manifold
+created by the constraint is much more effective than searching the whole space. 
+
+@subsection tut4-recombination Recombination
+Finally, we will implement our custom recombination operator. Recombination operator inherits from Recombinator,
+but similar to TypedMutator, we knew that we want to use @ref DoubleArrayGenome,
+therefore our operator should derive from TypedRecombinator.
+Here is the implementation:
+
+@snippet listing/SphereOpt.cpp Recombination
+
+The interface requires a vector of @ref DoubleArrayGenomePtr as parents and produces a @ref DoubleArrayGenomePtr as the child.
+The number of parents given to Recombinator::DoCombine() method is queried from the Recombinator::GetParentCount() which returns 2 in this case.
+
+@skip GetParentCount
+@until }
+
+Similar to Mutator, child Genome should be a **different object** and not share any pointer to its parents.
+We create a completely new DoubleArrayGenome using std::make_shared():
+
+@skipline make_shared
+
+Then we get the reference of parents' genes and also child's genes:
+
+@skipline x
+@skipline y
+@skipline z
+
+The calculation is, again, very straight-forward. Remember, at the end, we must normalize the vector:
+
+@skipline Normalize
+
+@subsection tut4-main Main program
+In the last step, we merge everything into the main function. The structure of this main function is identical to
+the one described in @ref tut1 "Tutorial 1". The only difference is the name of operators are changed to our custom operators:
+@tt{SphereInitializer}, @tt{SphereMutation} and @tt{SphereCrossover}. Besides that, we also use TournamentSelection as the survival selection
+mechanism and GenerationTerminationHook to terminate the algorithm based on the generation number.
+
+@snippet listing/SphereOpt.cpp Main
+
+@section tut4-compile Compile and Run
+Compile this program with <b>C++14 standard</b> as described in @ref tut1 "Tutorial 1".
+@code
+g++ -std=c++14 -o SphereOpt SphereOpt.cpp -lopenea
+@endcode
+
+Here is the output example when run the program (some lines of the evolution process are omitted).
+It may not be the same on your machine because the evolutionary process is stochastic.
+@code
+[2017-06-27 14:33:57.777922] Parallel processing is enabled, number of threads = 4
+[2017-06-27 14:33:57.787531] Population initialized, evaluation 100
+[2017-06-27 14:33:57.787597] Evolution started from generation 0, evaluation 100
+Gen       1	Best =   0.263902	0.2231-0.2153-0.2611-0.2893-0.2659-0.1449-0.1930-0.1854-0.1632- ...
+Gen       2	Best =   0.349648	0.1970-0.1747-0.2298-0.2863-0.2859-0.1826-0.2127-0.1957-0.1828- ...
+Gen       3	Best =   0.635857	0.2185-0.1901-0.2242-0.2226-0.2448-0.1861-0.2113-0.2028-0.1772- ...
+...
+Gen   9,998	Best =   0.999992	0.1999-0.2001-0.2001-0.2000-0.2000-0.2001-0.1999-0.2000-0.2001- ...
+Gen   9,999	Best =   0.999992	0.1999-0.2001-0.2001-0.2000-0.2000-0.2001-0.1999-0.2000-0.2001- ...
+Gen  10,000	Best =   0.999992	0.1999-0.2001-0.2001-0.2000-0.2000-0.2001-0.1999-0.2000-0.2001- ...
+[2017-06-27 14:34:08.009264] GenerationTerminationHook: Reached generation #10000 >= 10000. Terminating...
+[2017-06-27 14:34:08.009290] Evolution stopped at generation 10000, evaluation 1000100
+[2017-06-27 14:34:08.009309] Time Report: [S] 0.289283 [M] 0.135669 [E] 0.24971 [F] 0.0906382 [Total] 0.84278 ms
+@endcode
+
+While running the program, you may see a speed tracker like this:
+
+@code
+Gen    807 / 10,000     8.1%    Spd: 1757.211 g/s    ETA: 05s
+@endcode
+
+This is automatically turned on when you use GenerationTerminationHook or EvaluationTerminationHook.
+
+You can see the final fitness of the optimization process is near \f$1\f$
+and the genes in the final genome are near \f$\frac{1}{\sqrt{n}} = \frac{1}{\sqrt{25}} = 0.2\f$
+which match with the expected result.
+
+@section tut4-conclution Conclusion
+In this tutorial, you have known how to extend the framework by implementing
+custom operators for Initializer, Mutator and Recombinator interfaces.
+Besides that, you also learned about TypedMutator and TypedRecombinator to handle type-casting automatically
+and worked with @ref DoubleArrayGenome and smart pointers intensively.
+
+In the next tutorial, we will bundle our custom operators into a plugin and load it dynamically using the CLI:
+
+@ref tut5
+
+@note
+It seems redundant to write a lot of code in order to do such simple calculations. But in a long run, it will save
+you a lot of time debugging and implementing auxiliary modules such as BackupHook or MultiThreading.
+
+ */
+
+}

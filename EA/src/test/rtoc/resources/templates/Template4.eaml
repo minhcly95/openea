@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<Population size="10">
+	<initializer>
+		<TestInitializer/>
+	</initializer>
+	<evaluator>
+		<TestEvaluator/>
+	</evaluator>
+	<recombinators>
+		<MetaRecombinator ratio="0.7">
+			<recombinator>
+				<TestRecombinator/>
+			</recombinator>
+			<selector>
+				<TestSelector/>
+			</selector>
+		</MetaRecombinator>
+	</recombinators>
+	<survival-selector>
+		<TestSelector/>
+	</survival-selector>
+</Population>

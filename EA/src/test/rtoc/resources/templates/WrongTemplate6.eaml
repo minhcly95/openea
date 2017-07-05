@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<Population>
+	<initializer>
+		<TestInitializer/>
+	</initializer>
+	<evaluator>
+		<TestEvaluator/>
+	</evaluator>
+	<recombinators>
+		<MetaRecombinator ratio="0.7">
+			<recombinator>
+				<TestRecombinator/>
+			</recombinator>
+			<selector>
+				<TestSelector/>
+			</selector>
+		</MetaRecombinator>
+	</recombinators>
+	<mutators>
+		<MetaMutator rate="0.4">
+			<mutator>
+				<TestMutator/>
+			</mutator>
+		</MetaMutator>
+	</mutators>
+	<survival-selector>
+		<TestSelector/>
+	</survival-selector>
+</Population>

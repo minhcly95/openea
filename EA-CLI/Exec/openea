@@ -1,0 +1,190 @@
+#!/bin/bash
+set -m
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+
+function _term {
+	kill -TERM "$child" 2>/dev/null
+	wait "$child"
+}
+trap _term SIGTERM SIGINT
+
+
+function usage {
+	echo "Usage: openea <command>"
+	echo "Available commands:"
+	echo "    run       run an EAML file"
+	echo "    doc       open documentation"
+	echo "    gui       open GUI server"
+	echo "    update    build the library"
+	echo "    clean     clean the build"
+	echo "    edit      edit system config files"
+	echo "    cluster   launch on cluster"
+	echo "    addon     execute command in add-on folder"
+	exit 1
+}
+
+wdir=$(pwd)
+cd $(dirname $(realpath "$0"))
+clidir=$(pwd)
+
+if [[ $1 == "run" ]]; then
+	cd $wdir
+	$clidir/openea-run "${@:2}" &
+	child=$!
+	wait "$child"
+elif [[ $1 == "update" ]]; then
+	./AddonUpdate.sh
+elif [[ $1 == "clean" ]]; then
+	make clean
+	cd ../../EA/SharedLib
+	make clean
+elif [[ $1 == "cluster" ]]; then
+	if [[ $3 != "launch" ]]; then
+		function _term {
+			echo Sending signal to cluster. Please wait...
+			kill -TERM "$child" 2>/dev/null
+			wait "$child"
+		}
+	fi
+
+	if [[ $2 == "local" ]]; then
+		cd $wdir
+		if [[ $3 == "exec" ]]; then
+			if [[ -z $4 ]]; then
+				echo "openea cluster local exec: File name is required."
+			else
+				mpirun -quiet "${@:4}" &
+				child=$!
+				wait "$child"
+			fi
+		elif [[ $3 == "run" ]]; then
+			mpirun -quiet openea cluster local launch "${@:4}" &
+			child=$!
+			wait "$child"
+		elif [[ $3 == "launch" ]]; then
+			if [[ $OMPI_COMM_WORLD_RANK == "0" ]]; then
+				openea run "${@:4}" -c &
+				child=$!
+				wait "$child"
+			else
+				openea run "${@:4}" -ld= -c &
+				child=$!
+				wait "$child"
+			fi
+		else
+			echo openea cluster local: Unknown command. Please use \"run\" or \"exec\".
+		fi
+	elif [[ $2 == "remote" ]]; then
+		if [[ $3 == "exec" ]]; then
+			if [[ -z $4 ]]; then
+				echo "openea cluster remote exec: File name is required."
+			else
+				for dest in $(awk '{print $1}' cluster.conf); do
+					echo Copying $4 to $dest...
+					echo
+					ssh $dest "mkdir -p .openea"
+					scp $wdir/$4 $dest:.openea/exec
+					ssh $dest "mkdir -p /tmp/openea/"
+					scp remotelaunch.sh $dest:/tmp/openea/
+					echo
+				done
+				echo Launching...
+				echo
+				cd $wdir
+				mpirun -quiet -hostfile $clidir/cluster.conf /tmp/openea/remotelaunch.sh "" exec "${@:5}" &
+				child=$!
+				wait "$child"
+			fi
+		elif [[ $3 == "run" ]]; then
+			if [[ -z $4 ]]; then
+				echo "openea cluster remote run: File name is required."
+			else
+				rm -f $clidir/plugin-remote.conf
+				touch $clidir/plugin-remote.conf
+				while read -r line || [[ -n "$line" ]]; do
+					if [[ -e "$line" ]]; then
+						filename=$(filename $line)
+						echo $filename >> $clidir/plugin-remote.conf
+					fi
+				done <$clidir/plugin.conf
+				eamlfile=$(filename $4)
+
+				for dest in $(awk '{print $1}' cluster.conf); do
+					echo Copying CLI and plugins to $dest...
+					echo
+					ssh $dest "mkdir -p .openea"
+					scp $clidir/openea-run $dest:.openea/exec
+					scp $clidir/../../EA/SharedLib/libopenea.so $dest:.openea/
+					scp $clidir/libopenea_addon.so $dest:.openea/
+					scp $clidir/plugin-remote.conf $dest:.openea/plugin.conf
+
+					cd $wdir
+					scp $4 $dest:.openea/
+					cd $clidir
+
+					while read -r line || [[ -n "$line" ]]; do
+						if [[ -e "$line" ]]; then
+							scp $line $dest:.openea/
+						fi
+					done <$clidir/plugin.conf
+
+					ssh $dest "mkdir -p /tmp/openea/"
+					scp remotelaunch.sh $dest:/tmp/openea/
+					echo
+				done
+				echo Launching...
+				echo
+				mpirun -quiet -hostfile $clidir/cluster.conf /tmp/openea/remotelaunch.sh "$wdir" run $eamlfile "${@:5}" &
+				child=$!
+				wait "$child"
+			fi
+		elif [[ $3 == "populate" ]]; then
+			if [[ -z $4 ]]; then
+				echo "openea cluster remote populate: File name or directory is required."
+			else
+				cd $wdir
+				for dest in $(awk '{print $1}' $clidir/cluster.conf); do
+					echo Copying $4 to $dest...
+					echo
+					scp -r $4 $dest:.openea/$5
+					echo
+				done
+			fi
+		else
+			echo openea cluster remote: Unknown command. Please use \"run\" or \"exec\".
+		fi
+	else
+		echo openea cluster: Unknown command. Please use \"local\" or \"remote\".
+	fi
+elif [[ $1 == "edit" ]]; then
+	if [[ $2 == "plugin" ]]; then
+		editor plugin.conf
+	elif [[ $2 == "cluster" ]]; then
+		editor cluster.conf
+	else
+		echo openea edit: Unknown command. Please use \"plugin\" or \"cluster\".
+	fi
+elif [[ $1 == "doc" ]]; then
+	cd ../../EA
+	if [[ (-z $2) || ($2 == "open") ]]; then
+		xdg-open ./html/index.html > /dev/null
+	elif [[ $2 == "update" ]]; then
+		doxygen
+		xdg-open ./html/index.html > /dev/null
+	else
+		echo openea doc: Unknown command. Please use \"open\" or \"update\".
+	fi
+elif [[ $1 == "addon" ]]; then
+	cd ../add-on
+	if [[ -z $2 ]]; then
+		echo openea addon: Please enter a command.
+	else	
+		${@:2}
+	fi
+elif [[ $1 == "gui" ]]; then
+	cd ../../EA-GUI
+	npm start
+else
+	usage
+fi

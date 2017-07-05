@@ -1,0 +1,7 @@
+#!/bin/bash -e
+echo Building add-on...
+runuser -l "$SUDO_USER" -c "openea update" > /dev/null
+runuser -l "$SUDO_USER" -c "touch ~/.openea/plugin.conf"
+runuser -l "$SUDO_USER" -c "touch ~/.openea/cluster.conf"
+
+#DEBHELPER#

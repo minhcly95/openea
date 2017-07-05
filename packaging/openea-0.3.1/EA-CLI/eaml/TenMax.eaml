@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<EvolutionStrategy size="100|size">
+	
+	<initializer>
+		<IntRandomArrayInitializer length="10|length">
+			<randomizer>
+				<IntRandomizer lower="0" upper="10|bound"/>
+			</randomizer>
+		</IntRandomArrayInitializer>
+	</initializer>
+	
+	<evaluator>
+		<SampleTenMaxEvaluator/>
+	</evaluator>
+	
+	<recombinators>
+		<MetaRecombinator ratio="1">
+			<recombinator>
+				<IntNPointCrossover cross-count="2"/>
+			</recombinator>
+			<selector>
+				<UniformSelection with-replacement="false"/>
+			</selector>
+		</MetaRecombinator>
+	</recombinators>
+	
+	<mutators>
+		<MetaMutator rate="0.1">
+			<mutator>
+				<IntPointResetMutation rate="0.1">
+					<randomizer>
+						<IntRandomizer lower="0" upper="10"/>
+					</randomizer>
+				</IntPointResetMutation>
+			</mutator>
+		</MetaMutator>
+	</mutators>
+	
+	<survival-selector>
+		<GreedySelection/>
+	</survival-selector>
+		
+	<hooks>
+		<StandardOutputHook/>
+		<FitnessTerminationHook condition=">=" threshold="100|target"/>
+	</hooks>
+	
+</EvolutionStrategy>

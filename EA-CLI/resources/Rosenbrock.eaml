@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<CMAEvolutionStrategy dimension="20|dim" step-size="0.3" lambda="20|lambda" mu="10|mu" >
+
+	<evaluator>
+		<RosenbrockEvaluator/>
+	</evaluator>
+	
+	<hooks>
+		<!--<StandardOutputHook print-genome="false|detail"/>-->
+		<CMAStateOutputHook print-genome="false|detail"/>
+		<FitnessTerminationHook condition="<" threshold="1e-14|threshold"/>
+		<EvaluationTerminationHook target="400000|target"/>
+	</hooks>
+	
+</CMAEvolutionStrategy>

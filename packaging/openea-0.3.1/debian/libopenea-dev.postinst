@@ -1,0 +1,4 @@
+#!/bin/bash -e
+ln -sf /usr/lib/libopenea.so.0 /usr/lib/libopenea.so
+
+#DEBHELPER#

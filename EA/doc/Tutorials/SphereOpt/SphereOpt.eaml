@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<EvolutionStrategy size="100">
+	
+	<initializer>
+		<SphereInitializer length="25"/>
+	</initializer>
+	
+	<recombinators>
+		<MetaRecombinator ratio="1">
+			<recombinator>
+				<SphereCrossover/>
+			</recombinator>
+			<selector>
+				<UniformSelection/>
+			</selector>
+		</MetaRecombinator>
+	</recombinators>
+	
+	<mutators>
+		<MetaMutator rate="0.1">
+			<mutator>
+				<SphereMutation/>
+			</mutator>
+		</MetaMutator>
+	</mutators>
+	
+	<survival-selector>
+		<TournamentSelection size="5"/>
+	</survival-selector>
+	
+	<evaluator>
+		<SphereOptEvaluator/>
+	</evaluator>
+	
+	<hooks>
+		<StandardOutputHook/>
+		<GenerationTerminationHook target="10000"/>
+	</hooks>
+	
+</EvolutionStrategy>

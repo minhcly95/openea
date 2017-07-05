@@ -1,0 +1,292 @@
+namespace ea {
+
+/**
+
+@page tut3 Control the algorithm via CLI options
+This page describes how to use CLI options to add features to the algorithm.
+
+@par Tutorial level
+Beginner
+
+@par Previous tutorial
+@ref tut2
+
+@par Next tutorial
+@ref tut4
+
+@tableofcontents
+
+In the CLI toolset, options are added after the path to EAML file. The basic syntax to use CLI with options is:
+
+@code
+openea run <eaml_file> <options>
+@endcode
+
+@section tut3-var Variables
+Imagine that you are tuning your algorithm and you need to adjust an attribute multiple times.
+Even we can use EAML configuration file to avoid re-compiling our code, it is still annoying to edit the EAML file
+for each different parameter value, and this process can't be automated also (it can, but you will need an EAML file reader
+to do that). The library allows you to have a placeholder name (called **variable**) for an attribute in EAML file,
+which you can use later to set its value on the CLI. For example, to make the population size become a variable, modify
+the EAML like this:
+
+@code
+<EvolutionStrategy size="100|popSize">
+...
+</EvolutionStrategy>
+@endcode
+
+Now we have a variable named @cmd{"popSize"}. You can run your configuration file with a new variable value
+by entering this command:
+
+@code
+openea run OneMax.eaml --popSize=50
+@endcode
+
+then the population size will be changed to 50. If you don't set your variable (i.e. no @tt{"--popSize=50"} part),
+the CLI will use the default value of 100. Conclusively, you can define a variable in an EAML file by this syntax:
+
+@code
+attribute-name="defaultValue|variableName"
+@endcode
+
+And then use it later in the CLI toolset by adding the option \cmd{"--"}:
+
+@code
+--variableName=newValue
+@endcode
+
+Of course you can have multiple variables in your EAML file, you can define a new variable for the bit string length:
+
+@code
+...
+<BoolRandomArrayInitializer length="50|stringLength"/>
+...
+@endcode
+
+Then set both variables by appending the option \cmd{"--"}:
+
+@code
+openea run OneMax.eaml --popSize=50 --stringLength=10
+@endcode
+
+@note
+The order of options is not important. You can set all variables at once, set some of them or set none of them.
+For variables which are unset, the default value will be used.
+
+@section tut3-log Log redirection
+When running previous tutorials, you can notice that there are some output lines with color and some not.
+Those colors represent different log levels, and they can be configured so you can choose to show them or not,
+or to redirect them to files. There is four log levels in the library:
+
+- **Trace** (blue): show which phase of the evolution process is currently running.
+- **Debug** (yellow): show system information like which module is enable and when has the evolution process started.
+- **Info** (normal): show user information like best genome and fitness value.
+- **Error** (red): show error messages.
+
+To redirect log levels, you use the option @cmd{"-l"}:
+
+@code
+-l<levels>=<targets>
+-l<levels>+<targets>
+@endcode
+
+The first option will redirect @eamltag{levels} to @eamltag{targets} while discarding old targets
+and the second will append @eamltag{targets} to the target list.
+@eamltag{levels} can contain letters representing the levels like @tt{'t'} (trace), @tt{'d'} (debug),
+@tt{'i'} (info) and @tt{'e'} (error). You can use multiple letters in a same option at once.
+The @eamltag{targets} is the redirection target, which might be @tt{"stdout"}, @tt{"stderr"}
+or a path to a file (relative or absolute). You can also have multiple targets separated my comma (@tt{,}) in a same option.
+For example:
+
+@code
+-ltd="stdout,log.txt"
+@endcode
+
+will redirect the trace and the debug levels to both the @tt{stdout} and a file named @tt{log.txt}. If the file exists, the log
+will be **appended** (not overriden). The above option is the same with:
+
+@code
+-lt="stdout" -ld="stdout" -lt+"log.txt" -ld+"log.txt"
+@endcode
+
+@note
+%Log levels doesn't affect others, so enable a level won't enable or disable any other level.
+The order of letters in @eamltag{levels} is not important, but cannot be duplicated in one option.
+However, the order of options in the same level is important. The latest redirection option will
+override all previous options.
+
+@note Notice that if you add a target twice, it will be counted as **twice**, and there will be two lines of output to
+the same target. So users should take a little responsibility to manage the log redirection.
+
+If you want turn off some log levels, use:
+
+@code
+-l<levels>=
+@endcode
+
+The above option means redirect \eamltag{levels} to none (\tt{""}). However, if you omit the equal sign:
+
+@code
+-l<levels>
+@endcode
+
+That means the same as @tt{-l\<levels\>=stdout} for non-error levels and \tt{stderr} for error level.
+
+You can also redirect all the log levels at once by using @tt{\<levels\> = 'a'}:
+
+@code
+-la=<targets>
+@endcode
+
+To redirect log levels in C++ code, you can look at the static class Log to redirect channels and
+LogStream to write actual log record.
+
+@section tut3-term More Termination conditions
+
+In previous tutorials, you have known that you can use FitnessTerminationHook to terminate your algorithm.
+Now I introduce two more termination Hook which are GenerationTerminationHook and EvaluationTerminationHook,
+which will terminate the algorithm when the target generation or the evaluation number has been reached.
+You can add it directly to your EAML file, but the CLI provides you a faster way to do that, the option @cmd{"-t"}:
+
+@code
+-tg<target> or -tg=<target>
+-te<target> or -te=<target>
+@endcode
+
+The first one will add a GenerationTerminationHook to the algorithm, and the second one will add a EvaluationTerminationHook.
+If your EAML file has defined one or both of these two Hook, those pre-defined Hook will be discarded and only
+the one which is added by the \cmd{"-t"} option has the effect on the algorithm. Note that FitnessTerminationHook won't
+count, so this option won't override FitnessTerminationHook.
+
+@note
+In this option (and many other options), the equal sign is optional. It is not the case for some options,
+e.g. @cmd{"-l"} option for log redirection.
+
+For example, adding this option:
+
+@code
+-tg1000
+@endcode
+
+will terminate the algorithm at generation 1000 and override all defined GenerationTerminationHook and EvaluationTerminationHook.
+
+@section tut3-backup Back-up and Restore
+As we have mentioned, the CLI automatically saves a back-up file at the end of the evolution process. This back-up file contains
+the population of the last generation, which is a list of Genome with its corresponding Fitness value, all in binary form to
+save disk space. This file is used to restore the population if users want to, or to analyze the final result. But actually you
+can configure the CLI, so it will save back-up files at some frequency to a specified folder. The option is \cmd{"-b"}:
+
+@code
+-b<folder> or -b=<folder>
+-b<frequency>=<folder>
+@endcode
+
+The first option will set the BackupHook to save the back-up file still at the end of the evolution, but in a different @eamltag{folder}.
+The second one will save back-up files at the given frequency (in generation) additionally (so there is still a back-up file
+for the last generation). The back-up files will be created in the given folder and has the name \tt{"generation_number.eabak"}.
+For example, if we add these options to the CLI:
+
+@code
+-tg9 -b2=my-backup
+@endcode
+
+the algorithm will run for 9 generations. Each two generations, a back-up file will be generated. We also have a file for the last generation.
+So in total, there will be 5 files: \tt{000002.eabak}, \tt{000004.eabak}, \tt{000006.eabak}, \tt{000008.eabak} and \tt{000009.eabak}
+in the \tt{my-backup} folder (if it doesn't exist, the CLI will create it for you also).
+
+To restore a population from a back-up folder, you will use the option \cmd{"-r"}:
+
+@code
+-r
+-r<folder> or -r=<folder>
+-r<from>=<folder>
+@endcode
+
+The first option will restore the population from the default back-up folder (so it will restore the population from the most recent run
+with no @cmd{"-b"} option). The second will restore the population from the designated back-up folder (it will automatically search
+for the file with highest generation number). The third will restore from a given generation number instead of the highest one.
+For example, to restore the population from the example above, use the option:
+
+@code
+-r=my-backup
+@endcode
+
+To restore from generation 4, use the option:
+
+@code
+-r4=my-backup
+@endcode
+
+@note
+\cmd{"-r"} option will automatically redirect the default back-up folder if there is no \cmd{"-b"} option
+(e.g. for the above option, it also adds an implicit option \cmd{"-b=my-backup"}).
+However, if you want to set the frequency, you need to specify the \cmd{"-b"} option explicitly.
+
+For C++ users, take a look at BackupHook and Restore class which provide the same functionalities.
+
+@section tut3-multithread Multi-threading
+Multi-threading lets your operators process faster by dividing the task
+into multiple threads. There is some overhead, but with 2-4 threads, multi-threading is still profitable.
+The operators which can be multi-threaded are Mutator, Recombinator and Evaluator.
+
+@note
+With no \cmd{"-p"} option, the CLI toolset will enable multi-threading with default setting
+with the number of threads equal to the number of cores in your CPU.
+
+You can know whether multi-threading is enabled or not by looking into the log:
+
+@code
+Parallel processing is enabled, number of threads = 4
+@endcode
+
+The option for configuration of multi-threading feature is \cmd{"-p"} (for "p"arallelism):
+
+@code
+-p<numOfThreads> or -p=<numOfThreads>
+@endcode
+
+So if you want to disable multi-threading, use the option:
+
+@code
+-p1
+@endcode
+
+If you want to run with 2 threads:
+
+@code
+-p2
+@endcode
+
+If you don't know the number of threads that you should use, just don't give any \cmd{"-p"} option, or you can use:
+
+@code
+-p0
+@endcode
+
+which has the same meaning as the default setting.
+
+For C++ users, the function MultiThreading::SetNumThreads() which provides the same functionality with \cmd{"-p"} option.
+
+@section tut3-conclusion Conclusion
+
+In this tutorial, you have known how to add CLI options to enable some functionalities of the algorithm such as:
+
+- \cmd{"--"} option to assign EAML variables.
+- \cmd{"-l"} option to redirect log levels.
+- \cmd{"-t"} option to add termination conditions.
+- \cmd{"-b"} option to create back-up files and \cmd{"-r"} option to restore the population from them.
+- \cmd{"-p"} option to adjust the number of threads when multi-threading.
+
+In the next tutorial, we will discuss more advanced techniques, including writing custom operators:
+
+\ref tut4
+
+@note
+You might notice that in this tutorial, all of the features presented in the CLI toolset also have their counterpart in C++ API,
+because the CLI toolset is actually built on top of the API. Therefore, if you don't like the CLI toolset,
+you can still use all existed functionalities of the CLI in C++ code.
+
+ */
+
+}
