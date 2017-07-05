@@ -1,0 +1,15 @@
+<map id="src/rtoc/UnifiedData.h" name="src/rtoc/UnifiedData.h">
+<area shape="rect" id="node2" href="$_common_8h.html" title="../Common.h" alt="" coords="878,319,977,345"/>
+<area shape="rect" id="node22" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="591,155,725,181"/>
+<area shape="rect" id="node24" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="480,155,567,181"/>
+<area shape="rect" id="node31" href="$_operator_8h.html" title="../core/Operator.h" alt="" coords="749,155,873,181"/>
+<area shape="rect" id="node32" href="$_operator_group_8h.html" title="../core/OperatorGroup.h" alt="" coords="1000,155,1159,181"/>
+<area shape="rect" id="node33" href="$_series_operator_group_8h.html" title="../core/SeriesOperatorGroup.h" alt="" coords="879,80,1075,107"/>
+<area shape="rect" id="node14" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="575,393,717,420"/>
+<area shape="rect" id="node16" href="$_log_8h.html" title="misc/Log.h" alt="" coords="741,393,828,420"/>
+<area shape="rect" id="node17" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="852,393,1003,420"/>
+<area shape="rect" id="node18" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="1027,393,1134,420"/>
+<area shape="rect" id="node21" href="$_random_8h.html" title="misc/Random.h" alt="" coords="1158,393,1273,420"/>
+<area shape="rect" id="node20" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="1187,468,1332,495"/>
+<area shape="rect" id="node23" href="$_type_2_core_8h.html" title="Core.h" alt="" coords="863,237,925,263"/>
+</map>

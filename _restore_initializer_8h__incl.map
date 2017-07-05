@@ -1,0 +1,14 @@
+<map id="src/initializer/RestoreInitializer.h" name="src/initializer/RestoreInitializer.h">
+<area shape="rect" id="node2" href="$_type_2_core_8h.html" title="../EA/Type/Core.h" alt="" coords="617,535,745,562"/>
+<area shape="rect" id="node17" href="$_initializer_8h.html" title="../core/Initializer.h" alt="" coords="615,80,742,107"/>
+<area shape="rect" id="node3" href="$_common_8h.html" title="../../Common.h" alt="" coords="729,617,839,644"/>
+<area shape="rect" id="node13" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="789,692,931,719"/>
+<area shape="rect" id="node15" href="$_log_8h.html" title="misc/Log.h" alt="" coords="955,692,1042,719"/>
+<area shape="rect" id="node16" href="$_random_8h.html" title="misc/Random.h" alt="" coords="1067,692,1181,719"/>
+<area shape="rect" id="node18" href="$_recombinator_8h.html" title="Recombinator.h" alt="" coords="665,155,780,181"/>
+<area shape="rect" id="node19" href="$_constructable_8h.html" title="../rtoc/Constructable.h" alt="" coords="865,229,1017,256"/>
+<area shape="rect" id="node20" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="717,453,851,480"/>
+<area shape="rect" id="node21" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="1125,453,1211,480"/>
+<area shape="rect" id="node27" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="899,304,983,331"/>
+<area shape="rect" id="node28" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="927,379,1030,405"/>
+</map>

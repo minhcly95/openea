@@ -1,0 +1,19 @@
+<map id="src/selector/ResizableSelector.h" name="src/selector/ResizableSelector.h">
+<area shape="rect" id="node2" href="$core_2interface_2_selector_8h.html" title="../core/interface/Selector.h" alt="" coords="1391,80,1567,107"/>
+<area shape="rect" id="node3" href="$_type_2_core_8h.html" title="../../EA/Type/Core.h" alt="" coords="1049,543,1189,569"/>
+<area shape="rect" id="node24" href="$_constructible_8h.html" title="../../rtoc/Constructible.h" alt="" coords="1301,155,1461,181"/>
+<area shape="rect" id="node4" href="$_common_8h.html" title="../../Common.h" alt="" coords="931,617,1041,644"/>
+<area shape="rect" id="node16" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="846,692,987,719"/>
+<area shape="rect" id="node18" href="$_log_8h.html" title="misc/Log.h" alt="" coords="1012,692,1099,719"/>
+<area shape="rect" id="node19" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="1123,692,1273,719"/>
+<area shape="rect" id="node20" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="1298,692,1405,719"/>
+<area shape="rect" id="node23" href="$_random_8h.html" title="misc/Random.h" alt="" coords="1429,692,1543,719"/>
+<area shape="rect" id="node22" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="1457,767,1603,793"/>
+<area shape="rect" id="node25" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="1319,379,1453,405"/>
+<area shape="rect" id="node26" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="519,379,605,405"/>
+<area shape="rect" id="node32" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="956,229,1040,256"/>
+<area shape="rect" id="node33" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="947,304,1049,331"/>
+<area shape="rect" id="node35" href="$_operator_8h.html" title="../core/Operator.h" alt="" coords="849,461,973,487"/>
+<area shape="rect" id="node36" href="$_operator_group_8h.html" title="../core/OperatorGroup.h" alt="" coords="1201,461,1360,487"/>
+<area shape="rect" id="node37" href="$_series_operator_group_8h.html" title="../core/SeriesOperatorGroup.h" alt="" coords="900,379,1096,405"/>
+</map>

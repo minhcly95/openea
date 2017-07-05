@@ -1,0 +1,20 @@
+<map id="src/core/interface/Initializer.h" name="src/core/interface/Initializer.h">
+<area shape="rect" id="node2" href="$_type_2_core_8h.html" title="../../EA/Type/Core.h" alt="" coords="493,632,633,659"/>
+<area shape="rect" id="node23" href="$_recombinator_8h.html" title="Recombinator.h" alt="" coords="337,95,452,121"/>
+<area shape="rect" id="node3" href="$_common_8h.html" title="../../Common.h" alt="" coords="789,707,899,733"/>
+<area shape="rect" id="node15" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="580,781,721,808"/>
+<area shape="rect" id="node17" href="$_log_8h.html" title="misc/Log.h" alt="" coords="746,781,833,808"/>
+<area shape="rect" id="node18" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="857,781,1007,808"/>
+<area shape="rect" id="node19" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="1032,781,1139,808"/>
+<area shape="rect" id="node22" href="$_random_8h.html" title="misc/Random.h" alt="" coords="1163,781,1277,808"/>
+<area shape="rect" id="node21" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="1191,856,1337,883"/>
+<area shape="rect" id="node24" href="$_constructible_8h.html" title="../../rtoc/Constructible.h" alt="" coords="693,244,853,271"/>
+<area shape="rect" id="node39" href="$_variator_8h.html" title="Variator.h" alt="" coords="394,169,473,196"/>
+<area shape="rect" id="node25" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="445,468,579,495"/>
+<area shape="rect" id="node26" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="1315,468,1402,495"/>
+<area shape="rect" id="node32" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="895,319,979,345"/>
+<area shape="rect" id="node33" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="886,393,989,420"/>
+<area shape="rect" id="node35" href="$_operator_8h.html" title="../core/Operator.h" alt="" coords="601,550,725,577"/>
+<area shape="rect" id="node36" href="$_operator_group_8h.html" title="../core/OperatorGroup.h" alt="" coords="801,550,959,577"/>
+<area shape="rect" id="node37" href="$_series_operator_group_8h.html" title="../core/SeriesOperatorGroup.h" alt="" coords="655,468,851,495"/>
+</map>

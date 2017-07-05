@@ -1,0 +1,6 @@
+<map id="ea::Strategy" name="ea::Strategy">
+<area shape="rect" id="node4" href="$classea_1_1_c_m_a_evolution_strategy.html" title="An implementation of the (μ/μw,λ)&#45;CMA&#45;ES algorithm. " alt="" coords="5,244,183,271"/>
+<area shape="rect" id="node5" href="$classea_1_1_evolution_strategy.html" title="A trivial implementation of Evolution Strategy. " alt="" coords="207,244,354,271"/>
+<area shape="rect" id="node2" href="$classea_1_1_constructible.html" title="Base class for all classes which can be constructed in run&#45;time. " alt="" coords="127,95,248,121"/>
+<area shape="rect" id="node3" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/memory/enable_shared_from_this.html" title="std::enable_shared\l_from_this\&lt; Constructible \&gt;" alt="" coords="95,5,279,47"/>
+</map>

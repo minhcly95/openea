@@ -1,0 +1,23 @@
+<map id="src/core/pool/MetaPool.h" name="src/core/pool/MetaPool.h">
+<area shape="rect" id="node2" href="$_type_2_core_8h.html" title="../../EA/Type/Core.h" alt="" coords="861,767,1001,793"/>
+<area shape="rect" id="node23" href="$_pool_8h.html" title="Pool.h" alt="" coords="900,80,959,107"/>
+<area shape="rect" id="node26" href="$_constructible_8h.html" title="Constructible.h" alt="" coords="998,379,1109,405"/>
+<area shape="rect" id="node3" href="$_common_8h.html" title="../../Common.h" alt="" coords="979,841,1090,868"/>
+<area shape="rect" id="node15" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="1475,916,1616,943"/>
+<area shape="rect" id="node17" href="$_log_8h.html" title="misc/Log.h" alt="" coords="1641,916,1727,943"/>
+<area shape="rect" id="node18" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="223,916,374,943"/>
+<area shape="rect" id="node19" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="399,916,505,943"/>
+<area shape="rect" id="node22" href="$_random_8h.html" title="misc/Random.h" alt="" coords="580,916,695,943"/>
+<area shape="rect" id="node21" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="470,991,615,1017"/>
+<area shape="rect" id="node24" href="$_storable_8h.html" title="../../rtoc/Storable.h" alt="" coords="1033,155,1164,181"/>
+<area shape="rect" id="node25" href="$_storable_def_8h.html" title="StorableDef.h" alt="" coords="1034,304,1137,331"/>
+<area shape="rect" id="node41" href="$_binary_serializer_8h.html" title="BinarySerializer.h" alt="" coords="1155,229,1279,256"/>
+<area shape="rect" id="node27" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="1247,603,1382,629"/>
+<area shape="rect" id="node28" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="547,603,634,629"/>
+<area shape="rect" id="node34" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="1193,453,1277,480"/>
+<area shape="rect" id="node35" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="1011,528,1114,555"/>
+<area shape="rect" id="node37" href="$_operator_8h.html" title="../core/Operator.h" alt="" coords="1077,685,1201,711"/>
+<area shape="rect" id="node38" href="$_operator_group_8h.html" title="../core/OperatorGroup.h" alt="" coords="741,685,899,711"/>
+<area shape="rect" id="node39" href="$_series_operator_group_8h.html" title="../core/SeriesOperatorGroup.h" alt="" coords="778,603,974,629"/>
+<area shape="rect" id="node42" href="$_name_service_8h.html" title="NameService.h" alt="" coords="1161,304,1273,331"/>
+</map>

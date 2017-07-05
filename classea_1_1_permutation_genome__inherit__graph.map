@@ -1,0 +1,8 @@
+<map id="ea::PermutationGenome" name="ea::PermutationGenome">
+<area shape="rect" id="node2" href="$classea_1_1_genome_clonable.html" title="ea::GenomeClonable\l\&lt; PermutationGenome \&gt;" alt="" coords="5,319,171,360"/>
+<area shape="rect" id="node3" href="$classea_1_1_genome.html" title="The interface for representation. " alt="" coords="67,244,160,271"/>
+<area shape="rect" id="node4" href="$classea_1_1_storable.html" title="Base class for classes which can be stored in binary form. " alt="" coords="109,169,201,196"/>
+<area shape="rect" id="node7" href="$classea_1_1_array_genome_base.html" title="ea::ArrayGenomeBase\l\&lt; uint \&gt;" alt="" coords="195,319,349,360"/>
+<area shape="rect" id="node5" href="$classea_1_1_constructible.html" title="Base class for all classes which can be constructed in run&#45;time. " alt="" coords="94,95,215,121"/>
+<area shape="rect" id="node6" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/memory/enable_shared_from_this.html" title="std::enable_shared\l_from_this\&lt; Constructible \&gt;" alt="" coords="63,5,247,47"/>
+</map>

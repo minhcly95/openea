@@ -1,0 +1,82 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classea_1_1_cluster_computable_base.html" title="Base class for all ClusterComputable template. " alt="" coords="237,64,424,91"/>
+<area shape="rect" id="node2" href="$classea_1_1_cluster_computable.html" title="ea::ClusterComputable\l\&lt; GenomePtr, FitnessPtr \&gt;" alt="" coords="472,23,652,65"/>
+<area shape="rect" id="node8" href="$classea_1_1_cluster_computable.html" title="The interface for operators which are computable on cluster. " alt="" coords="484,89,640,130"/>
+<area shape="rect" id="node3" href="$classea_1_1_individual_evaluator.html" title="The interface for evaluation method at individual level. " alt="" coords="720,31,875,57"/>
+<area shape="rect" id="node4" href="$classea_1_1_scalar_evaluator.html" title="Specialization of IndividualEvaluator for ScalarFitness. " alt="" coords="978,31,1114,57"/>
+<area shape="rect" id="node5" href="$classea_1_1_functional_evaluator.html" title="A ScalarEvaluator which accepts an std::function as the evaluation function. " alt="" coords="1226,5,1385,32"/>
+<area shape="rect" id="node6" href="$classea_1_1_typed_scalar_evaluator.html" title="A ScalarEvaluator which will cast the input Genome into type T automatically. " alt="" coords="1203,56,1407,83"/>
+<area shape="rect" id="node7" href="$classea_1_1_typed_functional_evaluator.html" title="A TypedScalarEvaluator which accepts an std::function as the evaluation function. ..." alt="" coords="1461,56,1688,83"/>
+<area shape="rect" id="node9" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/memory/enable_shared_from_this.html" title="std::enable_shared\l_from_this\&lt; Constructible \&gt;" alt="" coords="5,507,189,549"/>
+<area shape="rect" id="node10" href="$classea_1_1_constructible.html" title="Base class for all classes which can be constructed in run&#45;time. " alt="" coords="270,515,391,541"/>
+<area shape="rect" id="node11" href="$classea_1_1_evaluator.html" title="The interface for evaluation method. " alt="" coords="513,193,611,220"/>
+<area shape="rect" id="node12" href="$classea_1_1_hook.html" title="The interface for custom code execution. " alt="" coords="525,264,599,291"/>
+<area shape="rect" id="node22" href="$classea_1_1_meta_recombinator.html" title="Wrapper of Recombinator with its corresponding parent Selector and offspring ratio. " alt="" coords="485,388,639,415"/>
+<area shape="rect" id="node23" href="$classea_1_1_randomizer.html" title="Class to store data for randomization process such as limits. " alt="" coords="489,439,635,465"/>
+<area shape="rect" id="node24" href="$classea_1_1_randomizer_3_01double_01_4.html" title="Specialization of Randomizer for double. " alt="" coords="474,489,650,516"/>
+<area shape="rect" id="node25" href="$classea_1_1_randomizer_3_01int_01_4.html" title="Specialization of Randomizer for int. " alt="" coords="486,540,638,567"/>
+<area shape="rect" id="node26" href="$classea_1_1_selector.html" title="The interface for selection operator. " alt="" coords="516,591,608,617"/>
+<area shape="rect" id="node31" href="$classea_1_1_storable.html" title="Base class for classes which can be stored in binary form. " alt="" coords="516,711,608,737"/>
+<area shape="rect" id="node49" href="$classea_1_1_strategy.html" title="The interface for execution order (algorithm). " alt="" coords="515,1091,609,1117"/>
+<area shape="rect" id="node52" href="$classea_1_1_variator.html" title="The interface for variation operator. " alt="" coords="517,1192,607,1219"/>
+<area shape="rect" id="node13" href="$classea_1_1_backup_hook.html" title="A Hook which backs up the Population to file. " alt="" coords="738,81,857,108"/>
+<area shape="rect" id="node14" href="$classea_1_1_c_m_a_state_output_hook.html" title="A Hook which prints out the state of CMAEvolutionStrategy algorithm. " alt="" coords="710,132,885,159"/>
+<area shape="rect" id="node15" href="$classea_1_1_fitness_report_hook.html" title="A Hook which reports the fitness values of the main pool to file. " alt="" coords="719,183,876,209"/>
+<area shape="rect" id="node16" href="$classea_1_1_fitness_termination_hook.html" title="A Hook which will terminate the Population based on a fitness condition. " alt="" coords="704,233,891,260"/>
+<area shape="rect" id="node17" href="$classea_1_1_informed_termination_hook.html" title="A Hook which tracks the speed an attribute and terminate when it reaches a given target. " alt="" coords="700,284,895,311"/>
+<area shape="rect" id="node20" href="$classea_1_1_real_time_info_hook.html" title="A Hook which provides real&#45;time information via Web interface. " alt="" coords="721,335,874,361"/>
+<area shape="rect" id="node21" href="$classea_1_1_standard_output_hook.html" title="A Hook which prints out best organism every generation. " alt="" coords="714,385,881,412"/>
+<area shape="rect" id="node18" href="$classea_1_1_evaluation_termination_hook.html" title="A Hook which terminates when the target evaluation number has been reached. " alt="" coords="944,233,1148,260"/>
+<area shape="rect" id="node19" href="$classea_1_1_generation_termination_hook.html" title="A Hook which terminates when the target generation number has been reached. " alt="" coords="943,284,1149,311"/>
+<area shape="rect" id="node27" href="$classea_1_1_resizable_selector.html" title="A Selector interface allowing resizable output pool. " alt="" coords="722,436,873,463"/>
+<area shape="rect" id="node28" href="$classea_1_1_greedy_selection.html" title="Implementation of Greedy selection operator. " alt="" coords="976,335,1116,361"/>
+<area shape="rect" id="node29" href="$classea_1_1_tournament_selection.html" title="Implementation of Tournament selection operator. " alt="" coords="963,385,1129,412"/>
+<area shape="rect" id="node30" href="$classea_1_1_uniform_selection.html" title="Implementation of Uniform selection operator. " alt="" coords="974,436,1118,463"/>
+<area shape="rect" id="node32" href="$classea_1_1_array_genome_base.html" title="ea::ArrayGenomeBase\l\&lt; uint \&gt;" alt="" coords="969,487,1123,529"/>
+<area shape="rect" id="node34" href="$classea_1_1_array_genome_base.html" title="Functionality class for ArrayGenome. " alt="" coords="953,736,1139,763"/>
+<area shape="rect" id="node36" href="$classea_1_1_fitness.html" title="The interface for general fitness. " alt="" coords="754,736,841,763"/>
+<area shape="rect" id="node38" href="$classea_1_1_genome.html" title="The interface for representation. " alt="" coords="751,627,844,653"/>
+<area shape="rect" id="node42" href="$classea_1_1_organism.html" title="Wrapper of Genome with its corresponding Fitness. " alt="" coords="747,787,847,813"/>
+<area shape="rect" id="node43" href="$classea_1_1_pool.html" title="The interface for list of objects, which can be stored in a Population. " alt="" coords="762,888,833,915"/>
+<area shape="rect" id="node48" href="$classea_1_1_population.html" title="The class containing all the data of the evolution process. " alt="" coords="745,1040,850,1067"/>
+<area shape="rect" id="node33" href="$classea_1_1_permutation_genome.html" title="Genome which stores a permutation of integers. " alt="" coords="1224,528,1387,555"/>
+<area shape="rect" id="node35" href="$classea_1_1_array_genome.html" title="Genome which stores an array of genes of type T. " alt="" coords="1227,707,1383,733"/>
+<area shape="rect" id="node37" href="$classea_1_1_scalar_fitness.html" title="Fitness implementation for single scalar fitness value. " alt="" coords="984,787,1108,813"/>
+<area shape="rect" id="node39" href="$classea_1_1_genome_clonable.html" title="The specialization of Genome to provide default shallow&#45;clone method. " alt="" coords="958,619,1134,645"/>
+<area shape="rect" id="node40" href="$classea_1_1_genome_clonable.html" title="ea::GenomeClonable\l\&lt; ArrayGenome\&lt; T \&gt; \&gt;" alt="" coords="967,670,1125,711"/>
+<area shape="rect" id="node41" href="$classea_1_1_genome_clonable.html" title="ea::GenomeClonable\l\&lt; PermutationGenome \&gt;" alt="" coords="963,553,1129,594"/>
+<area shape="rect" id="node44" href="$classea_1_1_c_m_a_state_pool.html" title="Extension of Pool to store the state of the CMAEvolutionStrategy algorithm. " alt="" coords="981,888,1111,915"/>
+<area shape="rect" id="node45" href="$classea_1_1_genome_pool.html" title="Data structure which contains a list of Genome. " alt="" coords="987,837,1105,864"/>
+<area shape="rect" id="node46" href="$classea_1_1_meta_pool.html" title="Data structure which aggregates other Pool into a map. " alt="" coords="997,939,1095,965"/>
+<area shape="rect" id="node47" href="$classea_1_1_organism_pool.html" title="Data structure which contains a list of Organism. " alt="" coords="983,989,1109,1016"/>
+<area shape="rect" id="node50" href="$classea_1_1_c_m_a_evolution_strategy.html" title="An implementation of the (μ/μw,λ)&#45;CMA&#45;ES algorithm. " alt="" coords="709,1091,886,1117"/>
+<area shape="rect" id="node51" href="$classea_1_1_evolution_strategy.html" title="A trivial implementation of Evolution Strategy. " alt="" coords="724,1141,871,1168"/>
+<area shape="rect" id="node53" href="$classea_1_1_meta_mutator.html" title="Wrapper of Mutator and its corresponding mutation rate. " alt="" coords="739,1192,856,1219"/>
+<area shape="rect" id="node54" href="$classea_1_1_recombinator.html" title="The interface for recombination operator. " alt="" coords="735,1243,860,1269"/>
+<area shape="rect" id="node55" href="$classea_1_1_initializer.html" title="The interface for initialization method. " alt="" coords="998,1047,1094,1073"/>
+<area shape="rect" id="node58" href="$classea_1_1_mutator.html" title="The interface for mutation operator. " alt="" coords="1002,1171,1090,1197"/>
+<area shape="rect" id="node68" href="$classea_1_1_n_point_crossover_3_01_t_01_4.html" title="Implementation of N&#45;point crossover operator for ArrayGenome. " alt="" coords="958,1236,1134,1263"/>
+<area shape="rect" id="node70" href="$classea_1_1_typed_recombinator.html" title="A Recombinator which requires the input and output Genome of type T instead of Genome. " alt="" coords="949,1287,1143,1313"/>
+<area shape="rect" id="node71" href="$classea_1_1_typed_recombinator.html" title="ea::TypedRecombinator\l\&lt; ArrayGenome\&lt; T \&gt; \&gt;" alt="" coords="965,1338,1127,1379"/>
+<area shape="rect" id="node73" href="$classea_1_1_typed_recombinator.html" title="ea::TypedRecombinator\l\&lt; PermutationGenome \&gt;" alt="" coords="963,1439,1129,1481"/>
+<area shape="rect" id="node56" href="$classea_1_1_permutation_initializer.html" title="A random Initializer for PermutationGenome. " alt="" coords="1222,996,1389,1023"/>
+<area shape="rect" id="node57" href="$classea_1_1_random_array_initializer.html" title="A random Initializer for ArrayGenome. " alt="" coords="1201,1047,1409,1073"/>
+<area shape="rect" id="node59" href="$classea_1_1_typed_mutator.html" title="A Mutator which requires the input and output Genome of type T instead of Genome. ..." alt="" coords="1227,1097,1383,1124"/>
+<area shape="rect" id="node60" href="$classea_1_1_typed_mutator.html" title="ea::TypedMutator\&lt; ArrayGenome\l\&lt; T \&gt; \&gt;" alt="" coords="1197,1149,1413,1190"/>
+<area shape="rect" id="node62" href="$classea_1_1_typed_mutator.html" title="ea::TypedMutator\&lt; Permutation\lGenome \&gt;" alt="" coords="1202,1214,1409,1255"/>
+<area shape="rect" id="node61" href="$classea_1_1_point_reset_mutation.html" title="Implementation of Point reset mutation operator for ArrayGenome. " alt="" coords="1479,1156,1670,1183"/>
+<area shape="rect" id="node63" href="$classea_1_1_permutation_mutation.html" title="Base class provides functionality for Mutator used on PermutationGenome. " alt="" coords="1493,1221,1657,1248"/>
+<area shape="rect" id="node64" href="$classea_1_1_insert_mutation.html" title="Implementation of Insert mutation operator for PermutationGenome. " alt="" coords="1747,1145,1874,1172"/>
+<area shape="rect" id="node65" href="$classea_1_1_inversion_mutation.html" title="Implementation of Inversion mutation operator for PermutationGenome. " alt="" coords="1737,1196,1884,1223"/>
+<area shape="rect" id="node66" href="$classea_1_1_scramble_mutation.html" title="Implementation of Scramble mutation operator for PermutationGenome. " alt="" coords="1736,1247,1885,1273"/>
+<area shape="rect" id="node67" href="$classea_1_1_swap_mutation.html" title="Implementation of Swap mutation operator for PermutationGenome. " alt="" coords="1747,1297,1874,1324"/>
+<area shape="rect" id="node69" href="$classea_1_1_n_point_crossover_3_01_t_00_01_n_01_4.html" title="Implementation of N&#45;point crossover operator for ArrayGenome with specified number of split points..." alt="" coords="1233,1279,1377,1321"/>
+<area shape="rect" id="node72" href="$classea_1_1_uniform_crossover.html" title="Implementation of Uniform crossover operator for ArrayGenome. " alt="" coords="1214,1345,1397,1372"/>
+<area shape="rect" id="node74" href="$classea_1_1_cycle_crossover.html" title="Implementation of Cycle crossover operator for PermutationGenome. " alt="" coords="1236,1396,1375,1423"/>
+<area shape="rect" id="node75" href="$classea_1_1_edge_crossover.html" title="Implementation of Edge crossover operator for PermutationGenome. " alt="" coords="1238,1447,1373,1473"/>
+<area shape="rect" id="node76" href="$classea_1_1_order_crossover.html" title="Implementation of Order crossover operator for PermutationGenome. " alt="" coords="1237,1497,1373,1524"/>
+<area shape="rect" id="node77" href="$classea_1_1_partially_mapped_crossover.html" title="Implementation of Partially mapped crossover operator (or PMX) for PermutationGenome. " alt="" coords="1207,1548,1404,1575"/>
+<area shape="rect" id="node78" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/container/map.html" title="std::map\&lt; uint, PoolPtr \&gt;" alt="" coords="713,939,882,965"/>
+<area shape="rect" id="node79" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/container/vector.html" title="std::vector\&lt; GenomePtr \&gt;" alt="" coords="710,837,885,864"/>
+<area shape="rect" id="node80" href="/home/minh/repo/vgu_interns/EA/doc/cppreference-doxygen-web.tag.xml$cpp/container/vector.html" title="std::vector\&lt; OrganismPtr \&gt;" alt="" coords="707,989,888,1016"/>
+</map>

@@ -1,0 +1,23 @@
+<map id="src/initializer/RestoreInitializer.cpp" name="src/initializer/RestoreInitializer.cpp">
+<area shape="rect" id="node2" href="$pch_8h.html" title="../pch.h" alt="" coords="1477,752,1543,779"/>
+<area shape="rect" id="node28" href="$_restore_initializer_8h.html" title="RestoreInitializer.h" alt="" coords="1153,155,1283,181"/>
+<area shape="rect" id="node44" href="$_backup_hook_8h.html" title="../hook/BackupHook.h" alt="" coords="1433,229,1585,256"/>
+<area shape="rect" id="node46" href="$_binary_serializer_8h.html" title="../rtoc/BinarySerializer.h" alt="" coords="1707,229,1870,256"/>
+<area shape="rect" id="node49" href="$_organism_8h.html" title="../core/Organism.h" alt="" coords="1374,80,1505,107"/>
+<area shape="rect" id="node29" href="$_type_2_core_8h.html" title="../EA/Type/Core.h" alt="" coords="1314,677,1442,704"/>
+<area shape="rect" id="node35" href="$_initializer_8h.html" title="../core/Initializer.h" alt="" coords="1147,229,1273,256"/>
+<area shape="rect" id="node30" href="$_common_8h.html" title="../../Common.h" alt="" coords="2016,752,2127,779"/>
+<area shape="rect" id="node31" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="2361,827,2502,853"/>
+<area shape="rect" id="node33" href="$_log_8h.html" title="misc/Log.h" alt="" coords="2527,827,2613,853"/>
+<area shape="rect" id="node34" href="$_random_8h.html" title="misc/Random.h" alt="" coords="2638,827,2753,853"/>
+<area shape="rect" id="node36" href="$_recombinator_8h.html" title="Recombinator.h" alt="" coords="1229,304,1343,331"/>
+<area shape="rect" id="node37" href="$_constructable_8h.html" title="../rtoc/Constructable.h" alt="" coords="1570,379,1722,405"/>
+<area shape="rect" id="node38" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="1937,603,2072,629"/>
+<area shape="rect" id="node39" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="1632,603,1719,629"/>
+<area shape="rect" id="node40" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="1768,453,1852,480"/>
+<area shape="rect" id="node41" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="1821,528,1924,555"/>
+<area shape="rect" id="node45" href="$_hook_8h.html" title="../core/Hook.h" alt="" coords="1469,304,1575,331"/>
+<area shape="rect" id="node47" href="$_name_service_8h.html" title="NameService.h" alt="" coords="1743,304,1855,331"/>
+<area shape="rect" id="node48" href="$_storable_def_8h.html" title="StorableDef.h" alt="" coords="1599,304,1701,331"/>
+<area shape="rect" id="node50" href="$_storable_8h.html" title="../rtoc/Storable.h" alt="" coords="1591,155,1709,181"/>
+</map>

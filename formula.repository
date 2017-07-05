@@ -1,0 +1,3 @@
+\form#0:$\overrightarrow{x}=\{x_1,x_2,...,x_N\}$
+\form#1:$x_i\in\{0, 1\}$
+\form#2:\[ F(\overrightarrow{x}) = \sum_{i=1}^N x_i \]

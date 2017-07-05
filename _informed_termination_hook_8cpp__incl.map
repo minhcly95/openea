@@ -1,0 +1,19 @@
+<map id="src/hook/termination/InformedTerminationHook.cpp" name="src/hook/termination/InformedTerminationHook.cpp">
+<area shape="rect" id="node2" href="$pch_8h.html" title="../../pch.h" alt="" coords="1411,647,1490,673"/>
+<area shape="rect" id="node29" href="$_informed_termination_hook_8h.html" title="InformedTerminationHook.h" alt="" coords="2446,95,2629,121"/>
+<area shape="rect" id="node31" href="$_common_8h.html" title="../../Common.h" alt="" coords="2327,647,2438,673"/>
+<area shape="rect" id="node30" href="$_type_2_core_8h.html" title="../../EA/Type/Core.h" alt="" coords="2313,565,2453,591"/>
+<area shape="rect" id="node40" href="$_hook_8h.html" title="../../core/interface\l/Hook.h" alt="" coords="2416,169,2541,211"/>
+<area shape="rect" id="node32" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="2819,721,2960,748"/>
+<area shape="rect" id="node34" href="$_log_8h.html" title="misc/Log.h" alt="" coords="2533,721,2619,748"/>
+<area shape="rect" id="node35" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="2643,721,2794,748"/>
+<area shape="rect" id="node36" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="2984,721,3091,748"/>
+<area shape="rect" id="node39" href="$_random_8h.html" title="misc/Random.h" alt="" coords="3115,721,3229,748"/>
+<area shape="rect" id="node38" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="3143,796,3289,823"/>
+<area shape="rect" id="node41" href="$_constructible_8h.html" title="../../rtoc/Constructible.h" alt="" coords="2367,259,2527,285"/>
+<area shape="rect" id="node42" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="2422,483,2557,509"/>
+<area shape="rect" id="node43" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="1659,483,1746,509"/>
+<area shape="rect" id="node45" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="2146,333,2230,360"/>
+<area shape="rect" id="node46" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="2137,408,2239,435"/>
+<area shape="rect" id="node48" href="$_operator_8h.html" title="../core/Operator.h" alt="" coords="2126,483,2250,509"/>
+</map>

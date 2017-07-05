@@ -1,0 +1,21 @@
+<map id="src/core/interface/Selector.cpp" name="src/core/interface/Selector.cpp">
+<area shape="rect" id="node2" href="$pch_8h.html" title="../../pch.h" alt="" coords="1419,557,1498,584"/>
+<area shape="rect" id="node29" href="$core_2interface_2_selector_8h.html" title="Selector.h" alt="" coords="2411,95,2493,121"/>
+<area shape="rect" id="node31" href="$_common_8h.html" title="../../Common.h" alt="" coords="2375,557,2486,584"/>
+<area shape="rect" id="node47" href="$_organism_pool_8h.html" title="../pool/OrganismPool.h" alt="" coords="2631,319,2785,345"/>
+<area shape="rect" id="node30" href="$_type_2_core_8h.html" title="../../EA/Type/Core.h" alt="" coords="2562,475,2702,502"/>
+<area shape="rect" id="node40" href="$_constructible_8h.html" title="../../rtoc/Constructible.h" alt="" coords="2268,169,2428,196"/>
+<area shape="rect" id="node32" href="$_e_a_exception_8h.html" title="misc/EAException.h" alt="" coords="2669,632,2811,659"/>
+<area shape="rect" id="node34" href="$_log_8h.html" title="misc/Log.h" alt="" coords="2835,632,2922,659"/>
+<area shape="rect" id="node35" href="$_multi_threading_8h.html" title="misc/MultiThreading.h" alt="" coords="2946,632,3097,659"/>
+<area shape="rect" id="node36" href="$_cluster_8h.html" title="misc/Cluster.h" alt="" coords="3121,632,3228,659"/>
+<area shape="rect" id="node39" href="$_random_8h.html" title="misc/Random.h" alt="" coords="2531,632,2645,659"/>
+<area shape="rect" id="node38" href="$_cluster_computable_8h.html" title="ClusterComputable.h" alt="" coords="3265,707,3410,733"/>
+<area shape="rect" id="node41" href="$_type_2_utility_8h.html" title="../EA/Type/Utility.h" alt="" coords="2297,393,2431,420"/>
+<area shape="rect" id="node42" href="$_serializer_8h.html" title="Serializer.h" alt="" coords="1858,393,1945,420"/>
+<area shape="rect" id="node44" href="$_type_info_8h.html" title="TypeInfo.h" alt="" coords="2206,244,2290,271"/>
+<area shape="rect" id="node45" href="$_unified_data_8h.html" title="UnifiedData.h" alt="" coords="2197,319,2299,345"/>
+<area shape="rect" id="node48" href="$_organism_8h.html" title="../Organism.h" alt="" coords="2669,393,2771,420"/>
+<area shape="rect" id="node50" href="$_pool_8h.html" title="Pool.h" alt="" coords="2795,393,2853,420"/>
+<area shape="rect" id="node49" href="$_storable_8h.html" title="../rtoc/Storable.h" alt="" coords="2746,475,2865,502"/>
+</map>
