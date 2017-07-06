@@ -77,14 +77,19 @@ int ScalarFitness::Compare(const Fitness& other) const {
 		return ((this->mValue > casted->mValue) ^ mMaximizer) ? -1 : 1;
 }
 
-inline void ScalarFitness::DoSerialize(ostream& pStream) const {
+void ScalarFitness::DoSerialize(ostream& pStream) const {
 	Write<bool>(pStream, mMaximizer);
 	Write<double>(pStream, mValue);
 }
 
-inline void ScalarFitness::DoDeserialize(istream& pStream) {
+void ScalarFitness::DoDeserialize(istream& pStream) {
 	mMaximizer = Read<bool>(pStream);
 	mValue = Read<double>(pStream);
+}
+
+ostream& ScalarFitness::Print(ostream& os) const {
+	os << mValue;
+	return os;
 }
 
 } /* namespace ea */

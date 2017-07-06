@@ -50,10 +50,10 @@ void StandardOutputHook::DoGenerational() {
 	LogStream info(Log::INFO);
 	info.imbue(std::locale("en_US.UTF-8"));
 	if (mPrintGenome) {
-		info <<"Gen " << setw(7) << GetGeneration() << "\tBest = " << setw(10) << organism->GetFitnessValue()
+		info <<"Gen " << setw(7) << GetGeneration() << "\tBest = " << setw(10) << *organism->GetFitness()
 		<< "\t" << *organism->GetGenome() << flush;
 	} else {
-		info <<"Gen " << setw(7) << GetGeneration() << "\tBest = " << setw(10) << organism->GetFitnessValue() << flush;
+		info <<"Gen " << setw(7) << GetGeneration() << "\tBest = " << setw(10) << *organism->GetFitness() << flush;
 	}
 }
 

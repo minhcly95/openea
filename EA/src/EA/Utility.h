@@ -34,6 +34,7 @@
 #include "../evaluator/PhenomeEvaluator.h"
 
 #include "../fitness/ScalarFitness.h"
+#include "../fitness/PoweredFitness.h"
 
 #include "../hook/StandardOutputHook.h"
 #include "../hook/termination/FitnessTerminationHook.h"
@@ -42,6 +43,7 @@
 #include "../hook/BackupHook.h"
 #include "../hook/realtimeinfo/RealTimeInfoHook.h"
 #include "../hook/FitnessReportHook.h"
+#include "../hook/CyclicHook.h"
 
 #include "../mutator/TypedMutator.h"
 #include "../recombinator/TypedRecombinator.h"

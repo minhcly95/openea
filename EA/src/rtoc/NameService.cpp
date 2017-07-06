@@ -116,6 +116,7 @@ NameService::InitStruct::InitStruct() {
 	ADD(BackupHook);
 	ADD(RealTimeInfoHook);
 	ADD(FitnessReportHook);
+	ADD(CyclicHook);
 
 	// Genome
 	ADD(BoolArrayGenome);
@@ -125,6 +126,7 @@ NameService::InitStruct::InitStruct() {
 
 	// Fitness
 	ADD(ScalarFitness);
+	ADD(PoweredFitness);
 
 	// Strategy
 	ADD(EvolutionStrategy);

@@ -35,6 +35,7 @@ DEFINE_PTR_TYPE(PhenomeDecoder)
 DEFINE_PTR_TYPE(PhenomeEvaluator)
 
 DEFINE_PTR_TYPE(ScalarFitness)
+DEFINE_PTR_TYPE(PoweredFitness)
 
 DEFINE_PTR_TYPE(StandardOutputHook);
 DEFINE_PTR_TYPE(FitnessTerminationHook);
@@ -43,6 +44,7 @@ DEFINE_PTR_TYPE(EvaluationTerminationHook);
 DEFINE_PTR_TYPE(BackupHook);
 DEFINE_PTR_TYPE(RealTimeInfoHook);
 DEFINE_PTR_TYPE(FitnessReportHook);
+DEFINE_PTR_TYPE(CyclicHook);
 
 DEFINE_PTR_TYPE_WITH_TEMPLATE(TypedRecombinator)
 

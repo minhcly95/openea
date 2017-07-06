@@ -52,7 +52,7 @@ public:
 	 * or specialize the whole Randomizer class.
 	 * @return A random value of type T.
 	 */
-	virtual inline T Get() const {
+	virtual inline T Get() {
 		return T::Random();
 	}
 };
@@ -63,7 +63,7 @@ public:
  * @return A random boolean value.
  */
 template<>
-inline bool Randomizer<bool>::Get() const {
+inline bool Randomizer<bool>::Get() {
 	return Random::Bool();
 }
 EA_TYPEINFO_SPECIALIZED_DEFAULT(BoolRandomizer)
@@ -88,6 +88,7 @@ template<>
 class Randomizer<int> : public Constructible {
 private:
 	int mLower, mUpper;
+	uniform_int_distribution<int> dist;
 
 public:
 	/**
@@ -96,7 +97,7 @@ public:
 	 * @param pUpper The upprt limits.
 	 */
 	inline Randomizer(int pLower, int pUpper) :
-			mLower(pLower), mUpper(pUpper) {
+			mLower(pLower), mUpper(pUpper), dist(mLower, mUpper) {
 	}
 	inline virtual ~Randomizer() {
 	}
@@ -106,8 +107,7 @@ public:
 	 * This will use the static Random::generator to generate the value.
 	 * @return A random integer value.
 	 */
-	virtual inline int Get() const {
-		static uniform_int_distribution<int> dist(mLower, mUpper);
+	virtual inline int Get() {
 		return dist(Random::generator);
 	}
 
@@ -138,6 +138,7 @@ template<>
 class Randomizer<double> : public Constructible {
 private:
 	double mLower, mUpper;
+	uniform_real_distribution<double> dist;
 
 public:
 	/**
@@ -146,7 +147,7 @@ public:
 	 * @param pUpper The upprt limits.
 	 */
 	inline Randomizer(double pLower, double pUpper) :
-			mLower(pLower), mUpper(pUpper) {
+			mLower(pLower), mUpper(pUpper), dist(mLower, mUpper) {
 	}
 	inline virtual ~Randomizer() {
 	}
@@ -156,8 +157,7 @@ public:
 	 * This will use the static Random::generator to generate the value.
 	 * @return A random double value.
 	 */
-	virtual inline double Get() const {
-		static uniform_real_distribution<double> dist(mLower, mUpper);
+	virtual inline double Get() {
 		return dist(Random::generator);
 	}
 

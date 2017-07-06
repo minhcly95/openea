@@ -29,9 +29,11 @@ public:
 
 	virtual int Compare(const Fitness& other) const;
 
+	virtual ostream& Print(ostream& os) const override;
+
 protected:
-	inline virtual void DoSerialize(ostream& pStream) const override;
-	inline virtual void DoDeserialize(istream& pStream) override;
+	virtual void DoSerialize(ostream& pStream) const override;
+	virtual void DoDeserialize(istream& pStream) override;
 };
 
 } /* namespace ea */

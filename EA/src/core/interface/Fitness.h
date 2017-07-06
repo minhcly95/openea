@@ -20,6 +20,8 @@ public:
 
 	virtual int Compare(const Fitness& other) const = 0;
 
+	virtual ostream& Print(ostream& os) const;
+
 	bool operator <(const Fitness& other) const;
 	bool operator ==(const Fitness& other) const;
 	bool operator >(const Fitness& other) const;
@@ -27,5 +29,7 @@ public:
 
 bool operator <(const FitnessPtr& f1, const FitnessPtr& f2);
 bool operator >(const FitnessPtr& f1, const FitnessPtr& f2);
+
+ostream& operator <<(ostream& os, const Fitness& genome);
 
 } /* namespace ea */

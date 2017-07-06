@@ -11,6 +11,8 @@
 
 namespace ea {
 
+using namespace std;
+
 /**
  * @class Fitness
  * The interface for general fitness.
@@ -90,6 +92,15 @@ bool operator <(const FitnessPtr& f1, const FitnessPtr& f2) {
  */
 bool operator >(const FitnessPtr& f1, const FitnessPtr& f2) {
 	return *f1 > *f2;
+}
+
+ostream& Fitness::Print(ostream& os) const {
+	os << "<Fitness>";
+	return os;
+}
+
+ostream& operator <<(ostream& os, const Fitness& fitness) {
+	return fitness.Print(os);
 }
 
 } /* namespace ea */
