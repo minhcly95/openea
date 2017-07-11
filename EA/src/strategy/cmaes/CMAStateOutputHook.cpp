@@ -13,6 +13,7 @@
 #include "../../core/Population.h"
 #include "../../core/Organism.h"
 #include "../../core/interface/Genome.h"
+#include "../../core/interface/Fitness.h"
 
 namespace ea {
 
@@ -45,7 +46,7 @@ void CMAStateOutputHook::DoGenerational() {
 	LogStream info(Log::INFO);
 	info.imbue(std::locale("en_US.UTF-8"));
 	info << "Gen " << setw(7) << GetGeneration() << setprecision(5)
-			<< "\tBest = " << setw(10) <<  GetBestOrganism()->GetFitnessValue() << setprecision(3)
+			<< "\tBest = " << setw(10) <<  *GetBestOrganism()->GetFitness() << setprecision(3)
 			<< "\tMax= " << setw(8) <<  cmapool->D(cmapool->D.size()-1) * cmapool->sigma
 			<< "\tMin= " << setw(8) <<  cmapool->D(0) * cmapool->sigma
 			//<< "\tAvg= " << setw(8) << pow(cmapool->D.prod(), 1.0/N) * cmapool->sigma

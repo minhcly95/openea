@@ -29,7 +29,7 @@ public:
 	Operator<Initializer> initializer;
 	OperatorGroup<MetaRecombinator> recombinators;
 	SeriesOperatorGroup<MetaMutator> mutators;
-	Operator<IndividualEvaluator> evaluator;
+	Operator<Evaluator> evaluator;
 	Operator<ResizableSelector> survivalSelector;
 
 	enum SelectionMode {

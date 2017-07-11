@@ -29,7 +29,7 @@ public:
 	uint GetMu() const;
 	void SetMu(uint pMu);
 
-	Operator<IndividualEvaluator> evaluator;
+	Operator<Evaluator> evaluator;
 
 	virtual bool IsReady() override;
 
