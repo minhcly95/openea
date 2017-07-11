@@ -7,6 +7,7 @@
 
 #include "../pch.h"
 #include "StandardOutputHook.h"
+#include "../core/interface/Fitness.h"
 #include "../core/Organism.h"
 #include "../core/interface/Genome.h"
 
