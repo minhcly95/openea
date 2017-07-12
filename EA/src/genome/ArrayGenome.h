@@ -69,6 +69,13 @@ public:
 	inline GenomeType& GetGenes() {
 		return mGenes;
 	}
+	/**
+	 * Get the array of genes as const reference.
+	 * @return The const reference of contained array of genes.
+	 */
+	inline const GenomeType& GetGenes() const {
+		return mGenes;
+	}
 
 protected:
 	inline virtual void DoSerialize(ostream& pStream) const override {
