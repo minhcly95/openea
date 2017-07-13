@@ -183,21 +183,22 @@ public:\
 	inline static TYPE Parse(string str);\
 	inline static std::string TypeName();\
 private:\
-	static std::map<string, TYPE> sDict;\
+	inline static std::map<string, TYPE> GetDict();\
 };\
 inline std::string ea::Serializer<TYPE>::TypeName() {\
 	return #TYPE;\
 }\
 inline TYPE ea::Serializer<TYPE>::Parse(string str) {\
+	const static std::map<string, TYPE> dict = GetDict();\
 	using namespace boost::algorithm;\
 	string trimmed = trim_copy(str);\
-	if (sDict.find(trimmed) == sDict.end())\
+	if (dict.find(trimmed) == dict.end())\
 		throw EA_EXCEPTION(RTOCException, DESERIALIZE_FAILED,\
 				"Serializer<vector>: Error when parsing \"" + str + "\" into " + TypeName() + ".");\
 	else\
-		return sDict.at(trimmed);\
+		return dict.at(trimmed);\
 }\
-std::map<string, TYPE> ea::Serializer<TYPE>::sDict =
+inline std::map<string, TYPE> ea::Serializer<TYPE>::GetDict()
 
 #endif
 
