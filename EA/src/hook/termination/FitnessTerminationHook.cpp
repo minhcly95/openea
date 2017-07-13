@@ -15,53 +15,40 @@ namespace ea {
 using namespace std;
 
 #ifndef DOXYGEN_IGNORE
-EA_DEFINE_CUSTOM_SERIALIZER(FitnessTerminationHook::Condition, data, ss) {
-	static HashMap<string, FitnessTerminationHook::Condition> strToCond = {
-		{"eq",  FitnessTerminationHook::EQUAL_TO},
-		{"equ",  FitnessTerminationHook::EQUAL_TO},
-		{"equal",  FitnessTerminationHook::EQUAL_TO},
-		{"equal-to",  FitnessTerminationHook::EQUAL_TO},
-		{"=",  FitnessTerminationHook::EQUAL_TO},
-		{"==",  FitnessTerminationHook::EQUAL_TO},
+EA_DEFINE_DICTIONARY_SERIALIZER(FitnessTerminationHook::Condition) {
+	{"eq",  FitnessTerminationHook::EQUAL_TO},
+	{"equ",  FitnessTerminationHook::EQUAL_TO},
+	{"equal",  FitnessTerminationHook::EQUAL_TO},
+	{"equal-to",  FitnessTerminationHook::EQUAL_TO},
+	{"=",  FitnessTerminationHook::EQUAL_TO},
+	{"==",  FitnessTerminationHook::EQUAL_TO},
 
-		{"lt",  FitnessTerminationHook::LESS_THAN},
-		{"lss",  FitnessTerminationHook::LESS_THAN},
-		{"less",  FitnessTerminationHook::LESS_THAN},
-		{"less-than",  FitnessTerminationHook::LESS_THAN},
-		{"<",  FitnessTerminationHook::LESS_THAN},
+	{"lt",  FitnessTerminationHook::LESS_THAN},
+	{"lss",  FitnessTerminationHook::LESS_THAN},
+	{"less",  FitnessTerminationHook::LESS_THAN},
+	{"less-than",  FitnessTerminationHook::LESS_THAN},
+	{"<",  FitnessTerminationHook::LESS_THAN},
 
-		{"le",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
-		{"leq",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
-		{"less-equal",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
-		{"less-or-equal",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
-		{"less-than-or-equal-to",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
-		{"<=",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"le",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"leq",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"less-equal",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"less-or-equal",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"less-than-or-equal-to",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
+	{"<=",  FitnessTerminationHook::LESS_THAN_OR_EQUAL_TO},
 
-		{"gt",  FitnessTerminationHook::GREATER_THAN},
-		{"gtr",  FitnessTerminationHook::GREATER_THAN},
-		{"greater",  FitnessTerminationHook::GREATER_THAN},
-		{"greater-than",  FitnessTerminationHook::GREATER_THAN},
-		{">",  FitnessTerminationHook::GREATER_THAN},
+	{"gt",  FitnessTerminationHook::GREATER_THAN},
+	{"gtr",  FitnessTerminationHook::GREATER_THAN},
+	{"greater",  FitnessTerminationHook::GREATER_THAN},
+	{"greater-than",  FitnessTerminationHook::GREATER_THAN},
+	{">",  FitnessTerminationHook::GREATER_THAN},
 
-		{"ge",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-		{"geq",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-		{"greater-equal",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-		{"greater-or-equal",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-		{"greater-than-or-equal-to",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-		{">=",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
-	};
-
-	string str;
-	if (!bool(ss >> str))
-		return false;
-
-	auto itr = strToCond.find(str);
-	if (itr == strToCond.end())
-		return false;
-
-	data = itr->second;
-	return true;
-}
+	{"ge",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+	{"geq",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+	{"greater-equal",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+	{"greater-or-equal",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+	{"greater-than-or-equal-to",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+	{">=",  FitnessTerminationHook::GREATER_OR_EQUAL_TO},
+};
 #endif
 
 EA_TYPEINFO_CUSTOM_IMPL(FitnessTerminationHook) {

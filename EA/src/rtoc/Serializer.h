@@ -13,6 +13,7 @@
 #include <ios>
 #include <locale>
 #include <boost/algorithm/string/trim.hpp>
+#include <boost/algorithm/string/split.hpp>
 #include <iterator>
 
 namespace ea {
@@ -150,6 +151,54 @@ EA_DEFINE_CUSTOM_SERIALIZER(string, data, ss) {
 	delete[] buffer;
 	return true;
 }
+
+// Vector specialization
+template<class T>
+class Serializer<vector<T>> {
+public:
+	inline static vector<T> Parse(string str) {
+		using namespace boost::algorithm;
+
+		string trimmed = trim_copy(str);
+		vector<string> splitVec;
+		split(splitVec, trimmed, is_any_of(" "), token_compress_on);
+
+		vector<T> data;
+
+		for (string token : splitVec) {
+			EA_EXCEPTION_WRAP(RTOCException, DESERIALIZE_FAILED,
+					"Serializer<vector>: Error when parsing \"" + token + "\" into " + Serializer<T>::TypeName() + ".",
+					data.push_back(Serializer<T>::Parse(token)));
+		}
+
+		return data;
+	}
+};
+
+// Dictionary serializer
+#define EA_DEFINE_DICTIONARY_SERIALIZER(TYPE)\
+template<>\
+class Serializer<TYPE> {\
+public:\
+	inline static TYPE Parse(string str);\
+	inline static std::string TypeName();\
+private:\
+	static std::map<string, TYPE> sDict;\
+};\
+inline std::string ea::Serializer<TYPE>::TypeName() {\
+	return #TYPE;\
+}\
+inline TYPE ea::Serializer<TYPE>::Parse(string str) {\
+	using namespace boost::algorithm;\
+	string trimmed = trim_copy(str);\
+	if (sDict.find(trimmed) == sDict.end())\
+		throw EA_EXCEPTION(RTOCException, DESERIALIZE_FAILED,\
+				"Serializer<vector>: Error when parsing \"" + str + "\" into " + TypeName() + ".");\
+	else\
+		return sDict.at(trimmed);\
+}\
+std::map<string, TYPE> ea::Serializer<TYPE>::sDict =
+
 #endif
 
 }	// namespace ea
